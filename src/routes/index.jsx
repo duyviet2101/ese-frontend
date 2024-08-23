@@ -11,7 +11,15 @@ export const routes = [
     children: [
       {
         path: "/",
+        element: <Navigate to={"/search-experts"}/>
+      },
+      {
+        path: "/search-experts",
         element: <SearchExperts/>
+      },
+      {
+        path: "/thesis-management",
+        element: <div>Thesis Management</div>
       }
     ]
   },

@@ -29,8 +29,7 @@ function Page404() {
               fontWeight: 'bold',
               borderRadius: '5px',
               position: 'relative',
-              transform: 'translateX(-50%)',
-              left: '50%',
+              marginX: 'auto',
             }} variant="contained" color="primary" component={Link} to={'/'} >Trở về trang chủ</Button>
           </div>
         </div>
