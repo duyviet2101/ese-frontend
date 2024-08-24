@@ -250,7 +250,8 @@ export default function TableExperts() {
             display: 'flex',
             gap: 1,
             flexBasis: "100%",
-            height: "40px"
+            height: "40px",
+            marginBottom: 1
           }}
         >
           <SearchNameBox/>

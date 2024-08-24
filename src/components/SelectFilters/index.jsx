@@ -3,8 +3,9 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import { darken, InputAdornment, lighten, Stack, styled, SvgIcon } from '@mui/material';
+import { Chip, darken, InputAdornment, lighten, Stack, styled, SvgIcon } from '@mui/material';
 import { BiSearchAlt } from 'react-icons/bi';
+import Tooltip from '@mui/material/Tooltip';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -58,6 +59,16 @@ export function SelectTopics() {
       multiple
       options={options.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter))}
       limitTags={4}
+      renderTags={(value, getTagProps) => value.map((option, index) => (
+        <Tooltip title={option.title} key={index}>
+          <Chip
+            label={option.title}
+            {...getTagProps({ index })}
+            key={index}
+            color={"info"}
+          />
+        </Tooltip>
+      ))}
       disableCloseOnSelect
       groupBy={(option) => option.firstLetter}
       getOptionLabel={(option) => option.title}
@@ -118,6 +129,17 @@ export function SelectDegree() {
       multiple
       options={options.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter))}
       limitTags={4}
+      renderTags={(value, getTagProps) => value.map((option, index) => (
+        <Tooltip title={option.title} key={index}>
+          <Chip
+            label={option.title}
+            {...getTagProps({ index })}
+            key={index}
+            color={"info"}
+            // variant={"outlined"}
+          />
+        </Tooltip>
+      ))}
       disableCloseOnSelect
       groupBy={(option) => option.firstLetter}
       getOptionLabel={(option) => option.title}
@@ -166,6 +188,17 @@ export function SelectAddress() {
       multiple
       options={options.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter))}
       limitTags={4}
+      renderTags={(value, getTagProps) => value.map((option, index) => (
+        <Tooltip title={option.state_name} key={index}>
+          <Chip
+            label={option.state_name}
+            {...getTagProps({ index })}
+            key={index}
+            color={"info"}
+            // variant={"outlined"}
+          />
+        </Tooltip>
+      ))}
       disableCloseOnSelect
       groupBy={(option) => option.firstLetter}
       getOptionLabel={(option) => option.state_name}
@@ -214,6 +247,17 @@ export function SelectOccupation() {
       multiple
       options={options.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter))}
       limitTags={4}
+      renderTags={(value, getTagProps) => value.map((option, index) => (
+        <Tooltip title={option.name_universities} key={index}>
+          <Chip
+            label={option.name_universities}
+            {...getTagProps({ index })}
+            key={index}
+            color={"info"}
+            // variant={"outlined"}
+          />
+        </Tooltip>
+      ))}
       disableCloseOnSelect
       groupBy={(option) => option.firstLetter}
       getOptionLabel={(option) => option.name_universities}
