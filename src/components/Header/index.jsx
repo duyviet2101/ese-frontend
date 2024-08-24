@@ -1,37 +1,14 @@
 import Button from "@mui/material/Button";
-import * as React from 'react';
 import Box from '@mui/material/Box';
 import Profile from "./Menus/Profile.jsx";
-import CategoriesDropdown from "./Menus/Categories/CategoriesDropdown.jsx";
 import LinkMui from "@mui/material/Link";
-import Notifications from "./Menus/Notifications/index.jsx";
-import {useDispatch, useSelector} from "react-redux";
 import {Link as LinkRouter} from "react-router-dom";
-import {AppBar, Container, Fab, Toolbar, useTheme} from "@mui/material";
+import {AppBar, Container, Toolbar, useTheme} from "@mui/material";
 import "./style.css";
-import {useEffect} from "react";
 import Logo from "~/assets/logoFIT.png";
 
 function Header() {
-  const dispatch = useDispatch();
   const theme = useTheme();
-  const [isScrolled, setIsScrolled] = React.useState(false);
-  useEffect(() => {
-    const handleScroll = () => {
-      const position = window.pageYOffset;
-      if (position > 0) {
-        setIsScrolled(true);
-      } else {
-        setIsScrolled(false);
-      }
-    };
-
-    window.addEventListener('scroll', handleScroll);
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
 
   return (
     <AppBar
@@ -51,7 +28,6 @@ function Header() {
             display: 'flex',
             justifyContent: 'space-between',
             height: theme.app.header.height,
-            boxShadow: (theme) => ( isScrolled ? theme.palette.boxShadow : 'none'),
             ".MuiButtonBase-root": {
               fontWeight: 600
             },
@@ -77,6 +53,7 @@ function Header() {
                 alignItems: 'center',
                 gap: 1,
               }}>
+                <Button sx={{color: 'white'}} component={LinkRouter} to="/" autoCapitalize='none'>Trang chủ</Button>
                 <Button sx={{color: 'white'}} component={LinkRouter} to="/thesis-management" autoCapitalize='none'>Quản lý luận án</Button>
                 <Button sx={{color: 'white'}} component={LinkRouter} to="/search-experts" autoCapitalize='none'>Tìm kiếm chuyên gia</Button>
               </Box>
