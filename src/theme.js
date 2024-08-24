@@ -46,9 +46,9 @@ const theme = extendTheme({
           default: 'rgb(234,234,234)',
           // paper: 'rgba(245,245,245,0.8)'
         },
-        primary: {
-          main: 'rgba(25,29,30,0.84)',
-        },
+        // primary: {
+        //   main: 'rgba(25,29,30,0.84)',
+        // },
         secondary: {
           main: 'rgba(25,29,30,0.84)',
         },

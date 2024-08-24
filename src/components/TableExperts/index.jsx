@@ -11,6 +11,9 @@ import {
   SelectTopics
 } from '~/components/SelectFilters/index.jsx';
 import Button from '@mui/material/Button';
+import { IoPersonAdd } from 'react-icons/io5';
+import { gridClasses } from '@mui/system';
+import Tooltip from '@mui/material/Tooltip';
 
 const columns = [
   { field: 'id', headerName: 'STT', width: 40 },
@@ -49,8 +52,25 @@ const columns = [
   },
   {
     headerName: "Lĩnh vực nghiên cứu",
-    field: "reasearchArea",
+    field: "researchArea",
     width: 130,
+    renderCell: (params) => {
+      return params.row.researchArea.map((area, index) => (
+          <Tooltip title={area} key={index}>
+            <Chip
+              key={index}
+              label={area}
+              size="small"
+              color={"primary"}
+              variant={"outlined"}
+              sx={{
+                marginRight: 0.5,
+                marginBottom: 0.5
+              }}
+            />
+          </Tooltip>
+        ));
+    }
   },
   {
     headerName: "Đơn vị công tác",
@@ -60,7 +80,7 @@ const columns = [
   {
     headerName: "Địa chỉ",
     field: "address",
-    width: 130,
+    width: 190,
   },
   {
     headerName: "Giới tính",
@@ -77,17 +97,16 @@ const columns = [
     field: "profile",
     width: 100,
     renderCell: (params) => (
-      // <LinkMui href={params.row.profile} target="_blank" underline="none">
-      //   Chi tiết
-      // </LinkMui>
-      <Chip
-        label="Chi tiết"
-        component="a"
-        href={params.row.profile}
-        target={"_blank"}
-        clickable
-        onClick={(event) => event.stopPropagation()}
-      />
+      <Tooltip title={params.row.profile}>
+        <Chip
+          label="Chi tiết"
+          component="a"
+          href={params.row.profile}
+          target={"_blank"}
+          clickable
+          onClick={(event) => event.stopPropagation()}
+        />
+      </Tooltip>
     ),
     disableClickEventBubbling: true
   }
@@ -100,7 +119,7 @@ export default function TableExperts() {
       "avatar": "https://www.w3schools.com/howto/img_avatar.png",
       "name": "Nguyễn Văn 1",
       "degree": "ThS",
-      "reasearchArea": "AI",
+      "researchArea": ["AI"],
       "workUnit": "ĐH Bách Khoa",
       "address": "Số 10 Đường ABC, Quận XYZ, TP.HCM",
       "gender": "Nam",
@@ -112,7 +131,7 @@ export default function TableExperts() {
       "avatar": "https://www.w3schools.com/howto/img_avatar.png",
       "name": "Nguyễn Văn 2",
       "degree": "TS",
-      "reasearchArea": "Data Science",
+      "researchArea": ["Data Science", "AI", "IT"],
       "workUnit": "ĐH Khoa học Tự nhiên",
       "address": "Số 11 Đường ABC, Quận XYZ, TP.HCM",
       "gender": "Nữ",
@@ -124,7 +143,7 @@ export default function TableExperts() {
       "avatar": "https://www.w3schools.com/howto/img_avatar.png",
       "name": "Nguyễn Văn 3",
       "degree": "PGS",
-      "reasearchArea": "Robotics",
+      "researchArea": ["Robotics"],
       "workUnit": "ĐH Kinh tế Quốc dân",
       "address": "Số 12 Đường ABC, Quận XYZ, TP.HCM",
       "gender": "Nam",
@@ -136,7 +155,7 @@ export default function TableExperts() {
       "avatar": "https://www.w3schools.com/howto/img_avatar.png",
       "name": "Nguyễn Văn 4",
       "degree": "GS",
-      "reasearchArea": "Software Engineering",
+      "researchArea": ["Software Engineering"],
       "workUnit": "ĐH Sư phạm",
       "address": "Số 13 Đường ABC, Quận XYZ, TP.HCM",
       "gender": "Nữ",
@@ -148,7 +167,7 @@ export default function TableExperts() {
       "avatar": "https://www.w3schools.com/howto/img_avatar.png",
       "name": "Nguyễn Văn 5",
       "degree": "ThS",
-      "reasearchArea": "AI",
+      "researchArea": ["AI"],
       "workUnit": "ĐH Bách Khoa",
       "address": "Số 14 Đường ABC, Quận XYZ, TP.HCM",
       "gender": "Nam",
@@ -160,7 +179,7 @@ export default function TableExperts() {
       "avatar": "https://www.w3schools.com/howto/img_avatar.png",
       "name": "Nguyễn Văn 6",
       "degree": "TS",
-      "reasearchArea": "Data Science",
+      "researchArea": ["Data Science"],
       "workUnit": "ĐH Khoa học Tự nhiên",
       "address": "Số 15 Đường ABC, Quận XYZ, TP.HCM",
       "gender": "Nữ",
@@ -172,7 +191,7 @@ export default function TableExperts() {
       "avatar": "https://www.w3schools.com/howto/img_avatar.png",
       "name": "Nguyễn Văn 7",
       "degree": "PGS",
-      "reasearchArea": "Robotics",
+      "researchArea": ["Robotics"],
       "workUnit": "ĐH Kinh tế Quốc dân",
       "address": "Số 16 Đường ABC, Quận XYZ, TP.HCM",
       "gender": "Nam",
@@ -184,7 +203,7 @@ export default function TableExperts() {
       "avatar": "https://www.w3schools.com/howto/img_avatar.png",
       "name": "Nguyễn Văn 8",
       "degree": "GS",
-      "reasearchArea": "Software Engineering",
+      "researchArea": ["Software Engineering"],
       "workUnit": "ĐH Sư phạm",
       "address": "Số 17 Đường ABC, Quận XYZ, TP.HCM",
       "gender": "Nữ",
@@ -196,7 +215,7 @@ export default function TableExperts() {
       "avatar": "https://www.w3schools.com/howto/img_avatar.png",
       "name": "Nguyễn Văn 9",
       "degree": "ThS",
-      "reasearchArea": "AI",
+      "researchArea": ["AI"],
       "workUnit": "ĐH Bách Khoa",
       "address": "Số 18 Đường ABC, Quận XYZ, TP.HCM",
       "gender": "Nam",
@@ -208,7 +227,7 @@ export default function TableExperts() {
       "avatar": "https://www.w3schools.com/howto/img_avatar.png",
       "name": "Nguyễn Văn 10",
       "degree": "TS",
-      "reasearchArea": "Data Science",
+      "researchArea": ["Data Science"],
       "workUnit": "ĐH Khoa học Tự nhiên",
       "address": "Số 19 Đường ABC, Quận XYZ, TP.HCM",
       "gender": "Nữ",
@@ -274,7 +293,7 @@ export default function TableExperts() {
         </Box>
       </Box>
       <Divider/>
-      <div style={{ height: 600, width: '100%' }}>
+      <div style={{ height: 800, width: '100%' }}>
         <DataGrid
           rows={rows}
           columns={columns}
@@ -286,6 +305,7 @@ export default function TableExperts() {
           pageSizeOptions={[5, 10]}
           checkboxSelection
           // disableRowSelectionOnClick={true}
+          getRowHeight={() => "auto"}
           sx={{
             "& .MuiDataGrid-columnsContainer": {
               backgroundColor: "primary.main",
@@ -317,9 +337,24 @@ export default function TableExperts() {
             "& .MuiDataGrid-cell": {
               cursor: "pointer"
             },
+            '&.MuiDataGrid-root--densityCompact .MuiDataGrid-cell': { py: '8px' },
+            '&.MuiDataGrid-root--densityStandard .MuiDataGrid-cell': { py: '15px' },
+            '&.MuiDataGrid-root--densityComfortable .MuiDataGrid-cell': { py: '22px' },
           }}
         />
       </div>
+      <Divider/>
+      <Button
+        variant="contained"
+        color={"success"}
+        sx={{
+          width: "20%",
+          alignSelf: "flex-end",
+        }}
+        startIcon={<IoPersonAdd/>}
+      >
+        Thêm vào hội đồng
+      </Button>
     </>
   );
 }

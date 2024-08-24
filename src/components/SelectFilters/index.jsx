@@ -3,7 +3,8 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import { darken, lighten, Stack, styled } from '@mui/material';
+import { darken, InputAdornment, lighten, Stack, styled, SvgIcon } from '@mui/material';
+import { BiSearchAlt } from 'react-icons/bi';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -260,6 +261,22 @@ export function SearchNameBox() {
           InputProps={{
             ...params.InputProps,
             type: 'search',
+            placeholder: "Nhập tên chuyên gia...",
+            startAdornment: (
+              <InputAdornment
+                position={"start"}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  height: "100%",
+                  marginRight: 0,
+                  marginLeft: 1,
+                }}
+              >
+                <SvgIcon component={BiSearchAlt}/>
+              </InputAdornment>
+            )
           }}
         />
       )}
