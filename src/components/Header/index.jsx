@@ -68,7 +68,7 @@ function Header() {
                 display: 'flex',
                 alignItems: 'center',
                 backgroundColor: 'transparent',
-              }} component={LinkRouter}>
+              }} component={LinkRouter} to={"/"}>
                 <img src={Logo} alt="logo" style={{ height: '40px', paddingLeft: '10px' }}/>
               </LinkMui>
               <Box sx={{

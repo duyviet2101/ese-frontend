@@ -3,6 +3,7 @@ import Page404 from "~/pages/404/index.jsx";
 import ErrorBoundary from "~/components/ErrorBoundary/index.jsx";
 import IndexPage from "~/pages/index.jsx";
 import SearchExperts from "~/pages/SearchExperts/index.jsx";
+import HomePage from '~/pages/HomePage/index.jsx';
 
 export const routes = [
   {
@@ -11,7 +12,7 @@ export const routes = [
     children: [
       {
         path: "/",
-        element: <Navigate to={"/search-experts"}/>
+        element: <HomePage/>
       },
       {
         path: "/search-experts",

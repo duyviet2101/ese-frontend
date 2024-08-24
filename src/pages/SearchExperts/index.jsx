@@ -6,7 +6,6 @@ import {MdOutlinePersonOutline} from "react-icons/md";
 import {FaRegClock, FaSchool} from "react-icons/fa";
 import Divider from "@mui/material/Divider";
 import TableExperts from "~/components/TableExperts/index.jsx";
-import SelectTopics, { RenderGroup } from '~/components/SelectTopics/index.jsx';
 
 function SearchExperts() {
   return (
@@ -97,7 +96,7 @@ function SearchExperts() {
                   gap: 0.5
                 }}
               >
-                <FaSchool/> 12/12/2021
+                <FaSchool/> NEU
               </Typography>
               <Divider orientation="vertical" flexItem />
               <Chip
@@ -119,9 +118,6 @@ function SearchExperts() {
             gap: "20px",
           }}
         >
-          <SelectTopics/>
-          <RenderGroup/>
-          <Divider/>
           <TableExperts/>
         </Box>
       </Container>

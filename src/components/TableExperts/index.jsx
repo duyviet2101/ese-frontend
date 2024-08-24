@@ -1,9 +1,16 @@
-import * as React from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
-import LinkMui from '@mui/material/Link';
 import { Chip } from '@mui/material';
+import Divider from '@mui/material/Divider';
+import {
+  SearchNameBox,
+  SelectAddress,
+  SelectDegree,
+  SelectOccupation,
+  SelectTopics
+} from '~/components/SelectFilters/index.jsx';
+import Button from '@mui/material/Button';
 
 const columns = [
   { field: 'id', headerName: 'STT', width: 40 },
@@ -211,41 +218,108 @@ export default function TableExperts() {
   ];
 
   return (
-    <div style={{ height: 600, width: '100%' }}>
-      <DataGrid
-        rows={rows}
-        columns={columns}
-        initialState={{
-          pagination: {
-            paginationModel: { page: 0, pageSize: 10 },
-          },
-        }}
-        pageSizeOptions={[5, 10]}
-        checkboxSelection
-        // disableRowSelectionOnClick={true}
+    <>
+      <Box
         sx={{
-          "& .MuiDataGrid-columnsContainer": {
-            backgroundColor: "primary.main",
-            color: "white",
-            fontWeight: "bold",
-          },
-          "& .MuiDataGrid-row": {
-            "&:nth-of-type(odd)": {
-              backgroundColor: "rgba(144, 202, 249, 0.16)",
-            },
-          },
-          "& .MuiDataGrid-row:hover": {
-            backgroundColor: "rgba(0, 0, 0, 0.04)",
-          },
-          "& .MuiDataGrid-row.Mui-selected": {
-            backgroundColor: "rgba(144,202,249,0.51)",
-          },
-          "& .MuiDataGrid-topContainer .MuiDataGrid-columnHeaders .MuiDataGrid-row--borderBottom": {
-            backgroundColor: "rgb(0,128,255)",
-            color: "white",
-          },
+          display: 'flex',
+          gap: 1,
+          flexWrap: "wrap"
         }}
-      />
-    </div>
+      >
+        <Box
+          sx={{
+            display: 'flex',
+            gap: 1,
+            flexBasis: "100%",
+            height: "40px"
+          }}
+        >
+          <SearchNameBox/>
+          <Button
+            variant="contained"
+            sx={{
+              textWrap: "none",
+              whiteSpace: "nowrap",
+              height: "100%",
+              backgroundColor: "rgb(0,128,255)",
+              "&:hover": {
+                backgroundColor: "rgb(0,128,255)",
+              },
+            }}
+          >
+            Tìm kiếm
+          </Button>
+          <Button
+            sx={{
+              textWrap: "none",
+              whiteSpace: "nowrap",
+              height: "100%",
+              paddingX: "15px"
+            }}
+          >
+            Xoá bộ lọc
+          </Button>
+        </Box>
+        <Box
+          sx={{
+            display: 'flex',
+            gap: 1,
+            width: "100%"
+          }}
+        >
+          <SelectTopics/>
+          <SelectDegree/>
+          <SelectAddress/>
+          <SelectOccupation/>
+        </Box>
+      </Box>
+      <Divider/>
+      <div style={{ height: 600, width: '100%' }}>
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          initialState={{
+            pagination: {
+              paginationModel: { page: 0, pageSize: 10 },
+            },
+          }}
+          pageSizeOptions={[5, 10]}
+          checkboxSelection
+          // disableRowSelectionOnClick={true}
+          sx={{
+            "& .MuiDataGrid-columnsContainer": {
+              backgroundColor: "primary.main",
+              color: "white",
+              fontWeight: "bold",
+            },
+            "& .MuiDataGrid-row": {
+              "&:nth-of-type(odd)": {
+                backgroundColor: "rgba(144, 202, 249, 0.16)",
+              },
+            },
+            "& .MuiDataGrid-row:hover": {
+              backgroundColor: "rgba(0, 0, 0, 0.04)",
+            },
+            "& .MuiDataGrid-row.Mui-selected": {
+              backgroundColor: "rgba(144,202,249,0.51)",
+            },
+            "& .MuiDataGrid-topContainer .MuiDataGrid-columnHeaders .MuiDataGrid-row--borderBottom": {
+              backgroundColor: "rgb(0,128,255)",
+              color: "white",
+            },
+            "& .MuiDataGrid-columnHeader": {
+              backgroundColor: "rgb(0,128,255)",
+              color: "white",
+            },
+            "& .MuiDataGrid-cell:focus": {
+              outline: "none",
+            },
+            "& .MuiDataGrid-cell": {
+              cursor: "pointer"
+            },
+          }}
+        />
+      </div>
+    </>
   );
 }
