@@ -108,7 +108,7 @@ export default function CreateThesis() {
           >
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DatePicker
-                label="Học vị"
+                label="Ngày sinh"
                 slotProps={{
                   textField: {
                     size: "small"
@@ -121,17 +121,23 @@ export default function CreateThesis() {
                 format={"DD/MM/YYYY"}
               />
             </LocalizationProvider>
-            <TextField
-              label="Chức danh"
-              size={"small"}
-              variant="outlined"
-              fullWidth
+            <Autocomplete
+              options={["Nam", "Nữ", "Khác"]}
+              getOptionLabel={(option) => option}
+              filterSelectedOptions
               sx={{
                 marginTop: 2
               }}
+              renderInput={(params) =>
+                <TextField
+                  {...params}
+                  label="Giới tính"
+                  size={"small"}
+                />
+              }
             />
             <TextField
-              label="Khoa"
+              label="Trường/Khoa/Viện"
               size={"small"}
               variant="outlined"
               fullWidth
@@ -170,7 +176,6 @@ export default function CreateThesis() {
             />
             <SelectTopics/>
             <Autocomplete
-              id="tags-outlined"
               options={levels}
               getOptionLabel={(option) => option.title}
               filterSelectedOptions
@@ -205,6 +210,19 @@ export default function CreateThesis() {
               />
             </LocalizationProvider>
           </Box>
+          <Button
+            variant="contained"
+            sx={{
+              marginTop: 2,
+              backgroundColor: "#007bff",
+              color: "#fff",
+              "&:hover": {
+                backgroundColor: "#0056b3"
+              },
+            }}
+          >
+            Tạo luận án
+          </Button>
         </Box>
       </Container>
     </>
