@@ -72,12 +72,21 @@ export function SelectDate() {
         <Box
           sx={{
             display: 'flex',
-            gap: 2,
+            gap: 1,
             flexWrap: "wrap"
           }}
         >
           <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker defaultValue={dayjs(Date.now())} label="Từ ngày" format={"DD/MM/YYYY"} />
+            <DatePicker
+              defaultValue={dayjs(Date.now())}
+              slotProps={{
+                textField: {
+                  size: "small"
+                }
+              }}
+              label="Từ ngày"
+              format={"DD/MM/YYYY"}
+            />
           </LocalizationProvider>
           <Divider
             flexItem={true}
@@ -87,7 +96,16 @@ export function SelectDate() {
             }}
           />
           <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker defaultValue={dayjs(Date.now())} label="Đến ngày" format={"DD/MM/YYYY"} />
+            <DatePicker
+              defaultValue={dayjs(Date.now())}
+              label="Đến ngày"
+              format={"DD/MM/YYYY"}
+              slotProps={{
+                textField: {
+                  size: "small"
+                }
+              }}
+            />
           </LocalizationProvider>
         </Box>
       </Box>
@@ -147,14 +165,13 @@ export function SelectStatus() {
       target: { value },
     } = event;
     setStatusLabel(
-      // On autofill we get a stringified value.
       typeof value === 'string' ? value.split(',') : value,
     );
   };
 
   return (
     <div>
-      <FormControl size={"small"} sx={{ minWidth: 200, height: 56 }}>
+      <FormControl size={"small"} sx={{ minWidth: 200 }}>
         <InputLabel id="select-status">Trạng thái</InputLabel>
         <Select
           labelId="select-status"
@@ -172,13 +189,12 @@ export function SelectStatus() {
                 {selected.map((value) => {
                   const item = status.find((item) => item.value === value);
                   return (
-                    <Chip key={value} color={item.color} label={item.label} style={{ margin: 2 }} />
+                    <Chip size={"small"} key={value} color={item.color} label={item.label} style={{ margin: 2 }} />
                   );
                 })}
               </Box>
             );
           }}
-          sx={{ height: "100%" }}
           MenuProps={MenuProps}
         >
           {status.map((item) => (

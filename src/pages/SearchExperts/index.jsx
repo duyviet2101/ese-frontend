@@ -21,17 +21,6 @@ function SearchExperts() {
       >
         <Container
           maxWidth={"lg"}
-        >
-          <Typography variant="h1" fontSize={"24px"} fontWeight={600}>Tìm kiếm chuyên gia: #112233</Typography>
-        </Container>
-      </Box>
-      <Container
-        maxWidth={"lg"}
-        sx={{
-          marginY: '20px',
-        }}
-      >
-        <Box
           sx={{
             display: 'flex',
             alignItems: 'center',
@@ -53,6 +42,22 @@ function SearchExperts() {
           >
             <IoIosArrowBack/>
           </Button>
+          <Typography variant="h1" fontSize={"24px"} fontWeight={600}>Tìm kiếm chuyên gia: #112233</Typography>
+        </Container>
+      </Box>
+      <Container
+        maxWidth={"lg"}
+        sx={{
+          marginY: '20px',
+        }}
+      >
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '10px',
+          }}
+        >
           <Box
             sx={{
               display: 'flex',

@@ -1,9 +1,9 @@
 import Box from '@mui/material/Box';
 import { Container, Typography } from '@mui/material';
-import Divider from '@mui/material/Divider';
-import { SearchNameBox, SelectDate, SelectStatus } from '~/components/SelectFiltersThese/index.jsx';
 import Button from '@mui/material/Button';
 import TableThese from '~/components/TableThese/index.jsx';
+import { MdAddCircle } from 'react-icons/md';
+import { Link } from 'react-router-dom';
 
 export default function ThesisManagement() {
   return (
@@ -24,8 +24,23 @@ export default function ThesisManagement() {
         maxWidth={"lg"}
         sx={{
           marginY: '20px',
+          display: 'flex',
+          flexDirection: 'column',
         }}
       >
+        <Button
+          variant="contained"
+          color={"info"}
+          component={Link}
+          to={"/thesis/create"}
+          sx={{
+            width: "200px",
+            alignSelf: "flex-end"
+          }}
+          startIcon={<MdAddCircle/>}
+        >
+          Tạo luận án
+        </Button>
         <TableThese/>
       </Container>
     </>

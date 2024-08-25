@@ -5,6 +5,7 @@ import IndexPage from "~/pages/index.jsx";
 import SearchExperts from "~/pages/SearchExperts/index.jsx";
 import HomePage from '~/pages/HomePage/index.jsx';
 import ThesisManagement from '~/pages/ThesisManagement/index.jsx';
+import CreateThesis from '~/pages/CreateThesis/index.jsx';
 
 export const routes = [
   {
@@ -20,8 +21,12 @@ export const routes = [
         element: <SearchExperts/>
       },
       {
-        path: "/thesis-management",
+        path: "/thesis",
         element: <ThesisManagement/>
+      },
+      {
+        path: "/thesis/create",
+        element: <CreateThesis/>
       }
     ]
   },

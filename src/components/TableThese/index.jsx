@@ -86,6 +86,7 @@ const columns = [
           <Chip
             label={status[index].label}
             color={status[index].color}
+            clickable={false}
             size={"small"}
             sx={{
               marginRight: 0.5,
@@ -102,7 +103,7 @@ const columns = [
     headerName: "Hành động",
     field: "actions",
     width: 200,
-    renderCell: (params) => (
+    renderCell: () => (
       <Box
         sx={{
           display: 'flex',
@@ -260,7 +261,7 @@ export default function TableThese() {
         borderRadius: "8px",
         display: "flex",
         flexDirection: "column",
-        gap: "20px",
+        gap: 1,
       }}
     >
       <Box

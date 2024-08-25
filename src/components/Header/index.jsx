@@ -54,7 +54,7 @@ function Header() {
                 gap: 1,
               }}>
                 <Button sx={{color: 'white'}} component={LinkRouter} to="/" autoCapitalize='none'>Trang chủ</Button>
-                <Button sx={{color: 'white'}} component={LinkRouter} to="/thesis-management" autoCapitalize='none'>Quản lý luận án</Button>
+                <Button sx={{color: 'white'}} component={LinkRouter} to="/thesis" autoCapitalize='none'>Quản lý luận án</Button>
                 <Button sx={{color: 'white'}} component={LinkRouter} to="/search-experts" autoCapitalize='none'>Tìm kiếm chuyên gia</Button>
               </Box>
             </Box>
