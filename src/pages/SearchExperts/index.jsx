@@ -6,8 +6,11 @@ import {MdOutlinePersonOutline} from "react-icons/md";
 import {FaRegClock, FaSchool} from "react-icons/fa";
 import Divider from "@mui/material/Divider";
 import TableExperts from "~/components/TableExperts/index.jsx";
+import { useNavigate } from 'react-router-dom';
 
 function SearchExperts() {
+  const navigate = useNavigate();
+
   return (
     <>
       <Box
@@ -46,6 +49,7 @@ function SearchExperts() {
               borderRadius: '50%',
               backgroundColor: 'rgba(0,0,0,0.1)',
             }}
+            onClick={() => navigate(-1)}
           >
             <IoIosArrowBack/>
           </Button>

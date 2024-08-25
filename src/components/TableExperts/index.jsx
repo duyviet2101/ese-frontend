@@ -9,7 +9,7 @@ import {
   SelectDegree,
   SelectOccupation,
   SelectTopics
-} from '~/components/SelectFilters/index.jsx';
+} from '~/components/SelectFiltersExperts/index.jsx';
 import Button from '@mui/material/Button';
 import { IoPersonAdd } from 'react-icons/io5';
 import { gridClasses } from '@mui/system';

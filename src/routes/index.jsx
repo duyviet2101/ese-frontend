@@ -4,6 +4,7 @@ import ErrorBoundary from "~/components/ErrorBoundary/index.jsx";
 import IndexPage from "~/pages/index.jsx";
 import SearchExperts from "~/pages/SearchExperts/index.jsx";
 import HomePage from '~/pages/HomePage/index.jsx';
+import ThesisManagement from '~/pages/ThesisManagement/index.jsx';
 
 export const routes = [
   {
@@ -20,7 +21,7 @@ export const routes = [
       },
       {
         path: "/thesis-management",
-        element: <div>Thesis Management</div>
+        element: <ThesisManagement/>
       }
     ]
   },

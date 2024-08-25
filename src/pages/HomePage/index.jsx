@@ -1,18 +1,14 @@
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import { IoIosArrowBack } from 'react-icons/io';
-import { Chip, Container, Typography, useTheme } from '@mui/material';
-import { MdOutlinePersonOutline } from 'react-icons/md';
-import Divider from '@mui/material/Divider';
-import { FaRegClock, FaSchool } from 'react-icons/fa';
-import TableExperts from '~/components/TableExperts/index.jsx';
+import { Container, useTheme } from '@mui/material';
 import {
   SearchNameBox,
   SelectAddress,
   SelectDegree,
   SelectOccupation,
   SelectTopics
-} from '~/components/SelectFilters/index.jsx';
+} from '~/components/SelectFiltersExperts/index.jsx';
+import { Link } from 'react-router-dom';
 
 export default function HomePage() {
   const theme = useTheme();
@@ -66,6 +62,8 @@ export default function HomePage() {
                   backgroundColor: "rgb(0,128,255)",
                 },
               }}
+              component={Link}
+              to={"/search-experts"}
             >
               Tìm kiếm
             </Button>
