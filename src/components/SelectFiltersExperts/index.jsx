@@ -107,7 +107,7 @@ export function SelectTopics({ defaultValues = [] }) {
         </li>
       )}
       renderInput={(params) => (
-        <TextField {...params} label="Chủ đề" placeholder="Chủ đề" />
+        <TextField {...params} placeholder="Chủ đề" />
       )}
     />
   );
@@ -178,7 +178,7 @@ export function SelectDegree() {
         </li>
       )}
       renderInput={(params) => (
-        <TextField {...params} label="Học vị" placeholder="Học vị" />
+        <TextField {...params} placeholder="Học vị" />
       )}
     />
   );
@@ -237,7 +237,7 @@ export function SelectAddress() {
         </li>
       )}
       renderInput={(params) => (
-        <TextField {...params} label="Khu vực" placeholder="Khu vực" />
+        <TextField {...params} placeholder="Khu vực" />
       )}
     />
   );
@@ -296,7 +296,7 @@ export function SelectOccupation() {
         </li>
       )}
       renderInput={(params) => (
-        <TextField {...params} label="Đơn vị công tác" placeholder="Đơn vị công tác" />
+        <TextField {...params} placeholder="Đơn vị công tác" />
       )}
     />
   );
