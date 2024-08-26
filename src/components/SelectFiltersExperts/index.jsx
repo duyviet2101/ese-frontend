@@ -26,7 +26,8 @@ const GroupItems = styled('ul')({
   padding: 0,
 });
 
-export function SelectTopics() {
+// eslint-disable-next-line react/prop-types
+export function SelectTopics({ defaultValues = [] }) {
   const topics = [
     {
       title: "Học máy",
@@ -45,30 +46,40 @@ export function SelectTopics() {
     }
   ]
 
-  const options = topics.map((option) => {
-    const firstLetter = option.title[0].toUpperCase();
-    return {
-      firstLetter: /[0-9]/.test(firstLetter) ? '0-9' : firstLetter,
-      ...option,
-    };
-  });
+  const addFirstLetter = (options) => {
+    if (!options) return undefined;
+    return options.map((option) => {
+      const firstLetter = option.title[0].toUpperCase();
+      return {
+        firstLetter: /[0-9]/.test(firstLetter) ? '0-9' : firstLetter,
+        ...option,
+      };
+    });
+  }
+
+  const options = addFirstLetter(topics);
 
   return (
     <Autocomplete
       size={"small"}
       multiple
+      defaultValue={options.filter((option) => defaultValues.includes(option.title))}
       options={options.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter))}
+      isOptionEqualToValue={(option, value) => option.title === value.title}
       limitTags={4}
-      renderTags={(value, getTagProps) => value.map((option, index) => (
-        <Tooltip title={option.title} key={index}>
-          <Chip
-            label={option.title}
-            {...getTagProps({ index })}
-            key={index}
-            color={"info"}
-          />
-        </Tooltip>
-      ))}
+      renderTags={(value, getTagProps) => {
+        // console.log(value)
+        return value.map((option, index) => (
+          <Tooltip title={option.title} key={index}>
+            <Chip
+              label={option.title}
+              {...getTagProps({ index })}
+              key={index}
+              color={"info"}
+            />
+          </Tooltip>
+        ))
+      }}
       disableCloseOnSelect
       groupBy={(option) => option.firstLetter}
       getOptionLabel={(option) => option.title}

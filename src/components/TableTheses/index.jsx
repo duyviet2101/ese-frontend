@@ -1,5 +1,5 @@
 import Box from '@mui/material/Box';
-import { SearchNameBox, SelectDate, SelectStatus } from '~/components/SelectFiltersThese/index.jsx';
+import { SearchNameBox, SelectDate, SelectStatus } from '~/components/SelectFiltersTheses/index.jsx';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import { DataGrid } from '@mui/x-data-grid';
@@ -103,7 +103,7 @@ const columns = [
     headerName: "Hành động",
     field: "actions",
     width: 200,
-    renderCell: () => (
+    renderCell: (params) => (
       <Box
         sx={{
           display: 'flex',
@@ -122,12 +122,12 @@ const columns = [
             onClick={(event) => event.stopPropagation()}
           />
         </Tooltip>
-        <Tooltip title={"Chi tiết"}>
+        <Tooltip title={"Chi tiết/Cập nhật"}>
           <Chip
-            label="Chi tiết"
+            label="Chi tiết/Cập nhật"
             component={Link}
             size={"small"}
-            to={"/thesis-detail"}
+            to={`/thesis/${params.row.id}`}
             clickable
             onClick={(event) => event.stopPropagation()}
           />
@@ -138,7 +138,7 @@ const columns = [
   }
 ];
 
-export default function TableThese() {
+export default function TableTheses() {
   const rows = [
     {
       "id": 1,

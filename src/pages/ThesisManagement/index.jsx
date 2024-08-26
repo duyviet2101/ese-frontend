@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import { Container, Typography } from '@mui/material';
 import Button from '@mui/material/Button';
-import TableThese from '~/components/TableThese/index.jsx';
+import TableTheses from '~/components/TableTheses/index.jsx';
 import { MdAddCircle } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 
@@ -41,7 +41,7 @@ export default function ThesisManagement() {
         >
           Tạo luận án
         </Button>
-        <TableThese/>
+        <TableTheses/>
       </Container>
     </>
   )
