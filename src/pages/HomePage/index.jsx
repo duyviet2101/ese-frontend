@@ -1,14 +1,6 @@
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import { Container, useTheme } from '@mui/material';
-import {
-  SearchNameBox,
-  SelectAddress,
-  SelectDegree,
-  SelectOccupation,
-  SelectTopics
-} from '~/components/SelectFiltersExperts/index.jsx';
-import { Link } from 'react-router-dom';
+import SearchToolBar from '~/components/SearchToolBar/index.jsx';
 
 export default function HomePage() {
   const theme = useTheme();
@@ -34,63 +26,7 @@ export default function HomePage() {
           gap: "20px",
         }}
       >
-        <Box
-          sx={{
-            display: 'flex',
-            gap: 1,
-            flexWrap: "wrap"
-          }}
-        >
-          <Box
-            sx={{
-              display: 'flex',
-              gap: 1,
-              flexBasis: "100%",
-              height: "40px",
-              marginBottom: 1
-            }}
-          >
-            <SearchNameBox/>
-            <Button
-              variant="contained"
-              sx={{
-                textWrap: "none",
-                whiteSpace: "nowrap",
-                height: "100%",
-                backgroundColor: "rgb(0,128,255)",
-                "&:hover": {
-                  backgroundColor: "rgb(0,128,255)",
-                },
-              }}
-              component={Link}
-              to={"/search-experts"}
-            >
-              Tìm kiếm
-            </Button>
-            <Button
-              sx={{
-                textWrap: "none",
-                whiteSpace: "nowrap",
-                height: "100%",
-                paddingX: "15px"
-              }}
-            >
-              Xoá bộ lọc
-            </Button>
-          </Box>
-          <Box
-            sx={{
-              display: 'flex',
-              gap: 1,
-              width: "100%"
-            }}
-          >
-            <SelectTopics/>
-            <SelectDegree/>
-            <SelectAddress/>
-            <SelectOccupation/>
-          </Box>
-        </Box>
+        <SearchToolBar/>
       </Box>
     </Container>
   )

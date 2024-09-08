@@ -42,7 +42,7 @@ function SearchExperts() {
           >
             <IoIosArrowBack/>
           </Button>
-          <Typography variant="h1" fontSize={"24px"} fontWeight={600}>Tìm kiếm chuyên gia: #112233</Typography>
+          <Typography variant="h1" fontSize={"24px"} fontWeight={600}>Tìm kiếm chuyên gia:</Typography>
         </Container>
       </Box>
       <Container
@@ -51,7 +51,7 @@ function SearchExperts() {
           marginY: '20px',
         }}
       >
-        <Box
+        {/*<Box
           sx={{
             display: 'flex',
             alignItems: 'center',
@@ -115,7 +115,7 @@ function SearchExperts() {
               />
             </Box>
           </Box>
-        </Box>
+        </Box>*/}
         <Box
           sx={{
             marginTop: '20px',

@@ -1,25 +1,65 @@
 import { DataGrid } from '@mui/x-data-grid';
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
-import { Chip } from '@mui/material';
+import { Chip, FormControl, Select } from '@mui/material';
 import Divider from '@mui/material/Divider';
-import {
-  SearchNameBox,
-  SelectAddress,
-  SelectDegree,
-  SelectOccupation,
-  SelectTopics
-} from '~/components/SelectFiltersExperts/index.jsx';
 import Button from '@mui/material/Button';
 import { IoPersonAdd } from 'react-icons/io5';
-import { gridClasses } from '@mui/system';
 import Tooltip from '@mui/material/Tooltip';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import MenuItem from '@mui/material/MenuItem';
+import Request from '~/utils/request.js';
+import SearchToolBar from '~/components/SearchToolBar/index.jsx';
+
+function SelectRole(initRole = "") {
+  const roles = [
+    { value: "", label: "Chọn", color: "default" },
+    { value: "chair", label: "Chủ tịch", color: "primary" },
+    { value: "member", label: "Thành viên", color: "primary" },
+  ]
+
+  const [roleState, setRoleState] = useState(initRole);
+
+  const handleChangeStatus = (event) => {
+    setRoleState(event.target.value);
+  }
+
+  return (
+    <FormControl>
+      <Select
+        id="select-action-input"
+        value={roleState}
+        displayEmpty
+        onChange={handleChangeStatus}
+        disableUnderline
+        variant={"standard"}
+        sx={{
+          "& .MuiSelect-select": {
+            padding: 0,
+            border: "none"
+          },
+          '.MuiOutlinedInput-notchedOutline': { border: 0 }
+        }}
+      >
+        {roles.map((item, index) => (
+          <MenuItem key={index} value={item.value}>
+            <Chip
+              label={item.label}
+              color={item.color}
+            />
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
+  )
+
+}
 
 const columns = [
-  { field: 'id', headerName: 'STT', width: 40 },
+  // { field: 'id', headerName: 'STT', width: 40 },
   {
     headerName: "Avatar",
-    field: "avatar",
+    field: "img",
     width: 60,
     renderCell: (params) => (
       <Box
@@ -33,7 +73,7 @@ const columns = [
         }}
       >
         <Avatar
-          src={params.row.avatar}
+          src={params.row.img}
           alt=""
           style={{
             width: 30,
@@ -52,14 +92,14 @@ const columns = [
   },
   {
     headerName: "Lĩnh vực nghiên cứu",
-    field: "researchArea",
-    width: 130,
+    field: "research_area",
+    width: 170,
     renderCell: (params) => {
-      return params.row.researchArea.map((area, index) => (
-          <Tooltip title={area} key={index}>
+      return params.row.research_area.map((area, index) => (
+          <Tooltip title={area.name} key={index}>
             <Chip
               key={index}
-              label={area}
+              label={area.name}
               size="small"
               color={"primary"}
               variant={"outlined"}
@@ -74,170 +114,27 @@ const columns = [
   },
   {
     headerName: "Đơn vị công tác",
-    field: "workUnit",
+    field: "company",
     width: 130,
   },
   {
     headerName: "Địa chỉ",
     field: "address",
-    width: 190,
+    width: 150,
   },
   {
     headerName: "Giới tính",
     field: "gender",
     width: 70,
+    renderCell: (params) => {
+      return params.row.gender === 0 ? "Nam" : "Nữ";
+    }
   },
   {
-    headerName: "Số điện thoại",
-    field: "phoneNumber",
-    width: 110,
-  },
-  {
-    headerName: "Profile",
-    field: "profile",
+    headerName: "Profile/SĐT",
+    field: "link_profile",
     width: 100,
     renderCell: (params) => (
-      <Tooltip title={params.row.profile}>
-        <Chip
-          label="Chi tiết"
-          component="a"
-          href={params.row.profile}
-          target={"_blank"}
-          clickable
-          onClick={(event) => event.stopPropagation()}
-        />
-      </Tooltip>
-    ),
-    disableClickEventBubbling: true
-  }
-];
-
-export default function TableExperts() {
-  const rows = [
-    {
-      "id": 1,
-      "avatar": "https://www.w3schools.com/howto/img_avatar.png",
-      "name": "Nguyễn Văn 1",
-      "degree": "ThS",
-      "researchArea": ["AI"],
-      "workUnit": "ĐH Bách Khoa",
-      "address": "Số 10 Đường ABC, Quận XYZ, TP.HCM",
-      "gender": "Nam",
-      "phoneNumber": "0123456780",
-      "profile": "http://example.com/profile1"
-    },
-    {
-      "id": 2,
-      "avatar": "https://www.w3schools.com/howto/img_avatar.png",
-      "name": "Nguyễn Văn 2",
-      "degree": "TS",
-      "researchArea": ["Data Science", "AI", "IT"],
-      "workUnit": "ĐH Khoa học Tự nhiên",
-      "address": "Số 11 Đường ABC, Quận XYZ, TP.HCM",
-      "gender": "Nữ",
-      "phoneNumber": "0123456781",
-      "profile": "http://example.com/profile2"
-    },
-    {
-      "id": 3,
-      "avatar": "https://www.w3schools.com/howto/img_avatar.png",
-      "name": "Nguyễn Văn 3",
-      "degree": "PGS",
-      "researchArea": ["Robotics"],
-      "workUnit": "ĐH Kinh tế Quốc dân",
-      "address": "Số 12 Đường ABC, Quận XYZ, TP.HCM",
-      "gender": "Nam",
-      "phoneNumber": "0123456782",
-      "profile": "http://example.com/profile3"
-    },
-    {
-      "id": 4,
-      "avatar": "https://www.w3schools.com/howto/img_avatar.png",
-      "name": "Nguyễn Văn 4",
-      "degree": "GS",
-      "researchArea": ["Software Engineering"],
-      "workUnit": "ĐH Sư phạm",
-      "address": "Số 13 Đường ABC, Quận XYZ, TP.HCM",
-      "gender": "Nữ",
-      "phoneNumber": "0123456783",
-      "profile": "http://example.com/profile4"
-    },
-    {
-      "id": 5,
-      "avatar": "https://www.w3schools.com/howto/img_avatar.png",
-      "name": "Nguyễn Văn 5",
-      "degree": "ThS",
-      "researchArea": ["AI"],
-      "workUnit": "ĐH Bách Khoa",
-      "address": "Số 14 Đường ABC, Quận XYZ, TP.HCM",
-      "gender": "Nam",
-      "phoneNumber": "0123456784",
-      "profile": "http://example.com/profile5"
-    },
-    {
-      "id": 6,
-      "avatar": "https://www.w3schools.com/howto/img_avatar.png",
-      "name": "Nguyễn Văn 6",
-      "degree": "TS",
-      "researchArea": ["Data Science"],
-      "workUnit": "ĐH Khoa học Tự nhiên",
-      "address": "Số 15 Đường ABC, Quận XYZ, TP.HCM",
-      "gender": "Nữ",
-      "phoneNumber": "0123456785",
-      "profile": "http://example.com/profile6"
-    },
-    {
-      "id": 7,
-      "avatar": "https://www.w3schools.com/howto/img_avatar.png",
-      "name": "Nguyễn Văn 7",
-      "degree": "PGS",
-      "researchArea": ["Robotics"],
-      "workUnit": "ĐH Kinh tế Quốc dân",
-      "address": "Số 16 Đường ABC, Quận XYZ, TP.HCM",
-      "gender": "Nam",
-      "phoneNumber": "0123456786",
-      "profile": "http://example.com/profile7"
-    },
-    {
-      "id": 8,
-      "avatar": "https://www.w3schools.com/howto/img_avatar.png",
-      "name": "Nguyễn Văn 8",
-      "degree": "GS",
-      "researchArea": ["Software Engineering"],
-      "workUnit": "ĐH Sư phạm",
-      "address": "Số 17 Đường ABC, Quận XYZ, TP.HCM",
-      "gender": "Nữ",
-      "phoneNumber": "0123456787",
-      "profile": "http://example.com/profile8"
-    },
-    {
-      "id": 9,
-      "avatar": "https://www.w3schools.com/howto/img_avatar.png",
-      "name": "Nguyễn Văn 9",
-      "degree": "ThS",
-      "researchArea": ["AI"],
-      "workUnit": "ĐH Bách Khoa",
-      "address": "Số 18 Đường ABC, Quận XYZ, TP.HCM",
-      "gender": "Nam",
-      "phoneNumber": "0123456788",
-      "profile": "http://example.com/profile9"
-    },
-    {
-      "id": 10,
-      "avatar": "https://www.w3schools.com/howto/img_avatar.png",
-      "name": "Nguyễn Văn 10",
-      "degree": "TS",
-      "researchArea": ["Data Science"],
-      "workUnit": "ĐH Khoa học Tự nhiên",
-      "address": "Số 19 Đường ABC, Quận XYZ, TP.HCM",
-      "gender": "Nữ",
-      "phoneNumber": "0123456789",
-      "profile": "http://example.com/profile10"
-    }
-  ];
-
-  return (
-    <>
       <Box
         sx={{
           display: 'flex',
@@ -245,67 +142,98 @@ export default function TableExperts() {
           flexWrap: "wrap"
         }}
       >
-        <Box
-          sx={{
-            display: 'flex',
-            gap: 1,
-            flexBasis: "100%",
-            height: "40px",
-            marginBottom: 1
-          }}
-        >
-          <SearchNameBox/>
-          <Button
-            variant="contained"
-            sx={{
-              textWrap: "none",
-              whiteSpace: "nowrap",
-              height: "100%",
-              backgroundColor: "rgb(0,128,255)",
-              "&:hover": {
-                backgroundColor: "rgb(0,128,255)",
-              },
-            }}
-          >
-            Tìm kiếm
-          </Button>
-          <Button
-            sx={{
-              textWrap: "none",
-              whiteSpace: "nowrap",
-              height: "100%",
-              paddingX: "15px"
-            }}
-          >
-            Xoá bộ lọc
-          </Button>
-        </Box>
-        <Box
-          sx={{
-            display: 'flex',
-            gap: 1,
-            width: "100%"
-          }}
-        >
-          <SelectTopics/>
-          <SelectDegree/>
-          <SelectAddress/>
-          <SelectOccupation/>
-        </Box>
+        <Tooltip title={params.row.link_profile}>
+          <Chip
+            label="Chi tiết"
+            component="a"
+            href={params.row.link_profile}
+            target={"_blank"}
+            clickable
+            onClick={(event) => event.stopPropagation()}
+          />
+        </Tooltip>
+        {params?.row?.phone?.trim() && <Tooltip title={params.row.phone}>
+          <Chip
+            label={params.row.phone}
+            variant={"outlined"}
+            color={"primary"}
+            onClick={(event) => event.stopPropagation()}
+          />
+        </Tooltip>}
+        {params?.row?.other_link?.trim() && <Tooltip title={params.row.other_link}>
+          <Chip
+            label={"Khác"}
+            variant={"outlined"}
+            href={params.row.other_link}
+            target={"_blank"}
+            clickable
+            component={"a"}
+            color={"primary"}
+            onClick={(event) => event.stopPropagation()}
+          />
+        </Tooltip>}
       </Box>
+    ),
+    disableClickEventBubbling: true
+  },
+  {
+    headerName: "Vai trò",
+    field: "role",
+    width: 150,
+    renderCell: (params) => {
+      return (
+        SelectRole(params.row.role)
+      )
+    }
+  }
+];
+
+const PAGE_SIZE = 10;
+
+const SERVER_OPTIONS = {
+  useCursorPagination: false,
+};
+
+export default function TableExperts() {
+  const [rows, setRows] = useState([]);
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0,
+    pageSize: PAGE_SIZE
+  });
+
+  const [pageInfo, setPageInfo] = useState({
+    totalRowCount: 0,
+  });
+
+  const rowCountRef = useRef(pageInfo?.totalRowCount || 0);
+
+  const rowCount = useMemo(() => {
+    if (pageInfo?.totalRowCount !== undefined) {
+      rowCountRef.current = pageInfo.totalRowCount;
+    }
+    return rowCountRef.current;
+  }, [pageInfo?.totalRowCount]);
+
+  return (
+    <>
+      <SearchToolBar
+        setRows={setRows}
+        setPageInfo={setPageInfo}
+        pageSize={PAGE_SIZE}
+        paginationModel={paginationModel}
+      />
       <Divider/>
       <div style={{ height: 800, width: '100%' }}>
         <DataGrid
           rows={rows}
           columns={columns}
-          initialState={{
-            pagination: {
-              paginationModel: { page: 0, pageSize: 10 },
-            },
-          }}
-          pageSizeOptions={[5, 10]}
+          rowCount={rowCount}
+          loading={false}
+          paginationModel={paginationModel}
+          paginationMode={"server"}
+          onPaginationModelChange={setPaginationModel}
+          pageSizeOptions={[PAGE_SIZE]}
           checkboxSelection
-          // disableRowSelectionOnClick={true}
           getRowHeight={() => "auto"}
           sx={{
             "& .MuiDataGrid-columnsContainer": {
@@ -345,7 +273,7 @@ export default function TableExperts() {
         />
       </div>
       <Divider/>
-      <Button
+      {/*<Button
         variant="contained"
         color={"success"}
         sx={{
@@ -355,7 +283,7 @@ export default function TableExperts() {
         startIcon={<IoPersonAdd/>}
       >
         Thêm vào hội đồng
-      </Button>
+      </Button>*/}
     </>
   );
 }

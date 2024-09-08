@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Divider from '@mui/material/Divider';
-import { SelectTopics } from '~/components/SelectFiltersExperts/index.jsx';
+import { SelectTopics } from '~/components/SearchToolBar/index.jsx';
 import Autocomplete from '@mui/material/Autocomplete';
 import { IoIosArrowBack } from 'react-icons/io';
 import Button from '@mui/material/Button';
