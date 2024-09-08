@@ -278,11 +278,12 @@ export function SearchBoxWhat({
   }, [searchValue, size, start]);
 
   const handleSearch = (e) => {
-    clearTimeout(timeoutRef.current);
-    const value = e.target.value;
-    timeoutRef.current = setTimeout(() => {
-      setSearchValue(value);
-    }, 500);
+    // clearTimeout(timeoutRef.current);
+    // const value = e.target.value;
+    // timeoutRef.current = setTimeout(() => {
+    //   setSearchValue(value);
+    // }, 500);
+    setSearchValue(e?.target?.value);
   }
 
   return (
@@ -350,11 +351,12 @@ export function SearchBoxWhere({
   }, [searchValue, size, start]);
 
   const handleSearch = (e) => {
-    clearTimeout(timeoutRef.current);
-    const value = e.target.value;
-    timeoutRef.current = setTimeout(() => {
-      setSearchValue(value);
-    }, 500);
+    // clearTimeout(timeoutRef.current);
+    // const value = e.target.value;
+    // timeoutRef.current = setTimeout(() => {
+    //   setSearchValue(value);
+    // }, 500);
+    setSearchValue(e?.target?.value);
   }
 
   return (
