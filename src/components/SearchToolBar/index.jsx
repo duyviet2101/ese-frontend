@@ -99,9 +99,9 @@ export function SelectTopics({
             )
           }}
           value={select}
-          {...register("research_area", {
+          {...(register ? register("research_area", {
             onChange: handleChange
-          })}
+          }) : {})}
           MenuProps={MenuProps}
         >
           {topics.map((item) => (
@@ -437,7 +437,7 @@ export default function SearchToolBar({
       degree,
       company,
     } = data;
-    console.log(research_area, degree, company);
+    // console.log(research_area, degree, company);
 
     if (degree) {
       degree = typeof degree === 'string' ? degree : degree?.join(",");
@@ -491,7 +491,7 @@ export default function SearchToolBar({
   useEffect(() => {
     const fetchData = async () => {
       const res = await Request.get(`/experts/search?${searchParams.toString()}&start=${(paginationModel.page * paginationModel.pageSize) || 0}&size=${paginationModel?.pageSize || pageSize}`);
-      console.log(res);
+      // console.log(res);
       setRows(res.items);
       setTopics(res.facets?.research_area?.buckets || []);
       setDegrees(res.facets?.degree?.buckets || []);
@@ -502,7 +502,7 @@ export default function SearchToolBar({
     }
     fetchData();
   }, [searchParams, paginationModel]);
-  console.log(paginationModel)
+  // console.log(paginationModel)
 
   return (
     <Box

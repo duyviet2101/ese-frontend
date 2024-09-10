@@ -44,7 +44,7 @@ export default function CreateThesis() {
           >
             <IoIosArrowBack/>
           </Button>
-          <Typography variant="h1" fontSize={"24px"} fontWeight={600}>Tạo luận án</Typography>
+          <Typography variant="h1" fontSize={"24px"} fontWeight={600}>Tạo thông tin luận án</Typography>
         </Container>
       </Box>
       <Container

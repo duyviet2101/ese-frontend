@@ -127,7 +127,7 @@ const columns = [
     field: "gender",
     width: 70,
     renderCell: (params) => {
-      return params.row.gender === 0 ? "Nam" : "Nữ";
+      return params.row.gender === 1 ? "Nam" : "Nữ";
     }
   },
   {
