@@ -73,7 +73,7 @@ const columns = [
         }}
       >
         <Avatar
-          src={params.row.img}
+          src={"https://qldt.neu.edu.vn/QuanLyLLKH/Upload/Avatar/" + params.row.img}
           alt=""
           style={{
             width: 30,
