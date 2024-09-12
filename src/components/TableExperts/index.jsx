@@ -10,6 +10,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import Request from '~/utils/request.js';
 import SearchToolBar from '~/components/SearchToolBar/index.jsx';
+import pushToast from '~/helpers/sonnerToast.js';
 
 function SelectRole(initRole = "") {
   const roles = [
@@ -131,49 +132,70 @@ const columns = [
     }
   },
   {
-    headerName: "Profile/SĐT",
+    headerName: "Profile/Liên lạc",
     field: "link_profile",
-    width: 100,
-    renderCell: (params) => (
-      <Box
-        sx={{
-          display: 'flex',
-          gap: 1,
-          flexWrap: "wrap"
-        }}
-      >
-        <Tooltip title={params.row.link_profile}>
-          <Chip
-            label="Chi tiết"
-            component="a"
-            href={params.row.link_profile}
-            target={"_blank"}
-            clickable
-            onClick={(event) => event.stopPropagation()}
-          />
-        </Tooltip>
-        {params?.row?.phone?.trim() && <Tooltip title={params.row.phone}>
-          <Chip
-            label={params.row.phone}
-            variant={"outlined"}
-            color={"primary"}
-            onClick={(event) => event.stopPropagation()}
-          />
-        </Tooltip>}
-        {params?.row?.other_link?.trim() && <Tooltip title={params.row.other_link}>
-          <Chip
-            label={"Khác"}
-            variant={"outlined"}
-            href={params.row.other_link}
-            target={"_blank"}
-            clickable
-            component={"a"}
-            color={"primary"}
-            onClick={(event) => event.stopPropagation()}
-          />
-        </Tooltip>}
-      </Box>
-    ),
+    width: 150,
+    renderCell: (params) => {
+      const handleCopy = (value) => {
+        navigator.clipboard.writeText(value);
+        pushToast("Đã sao chép " + value + " vào bộ nhớ tạm!", "success");
+      }
+
+      return (
+        <Box
+          sx={{
+            display: 'flex',
+            gap: 1,
+            flexWrap: "wrap"
+          }}
+        >
+          <Tooltip title={params.row.link_profile}>
+            <Chip
+              label="Chi tiết"
+              component="a"
+              href={params.row.link_profile}
+              target={"_blank"}
+              clickable
+              onClick={(event) => event.stopPropagation()}
+            />
+          </Tooltip>
+          {params?.row?.phone?.trim() && <Tooltip title={params.row.phone}>
+            <Chip
+              label={params.row.phone}
+              variant={"outlined"}
+              color={"primary"}
+              onClick={(event) => {
+                event.stopPropagation();
+                handleCopy(params.row.phone);
+              }}
+            />
+          </Tooltip>}
+          {params?.row?.email?.trim() && <Tooltip title={params.row.email}>
+            <Chip
+              label={params.row.email}
+              variant={"outlined"}
+              color={"primary"}
+              onClick={(event) => {
+                event.stopPropagation();
+                handleCopy(params.row.email);
+              }}
+            />
+          </Tooltip>}
+          {params?.row?.other_link?.trim() && <Tooltip title={params.row.other_link}>
+            <Chip
+              label={"Khác"}
+              variant={"outlined"}
+              href={params.row.other_link}
+              target={"_blank"}
+              clickable
+              component={"a"}
+              color={"primary"}
+              onClick={(event) => event.stopPropagation()}
+            />
+          </Tooltip>}
+        </Box>
+      )
+    },
     disableClickEventBubbling: true
   },
   {
@@ -189,10 +211,6 @@ const columns = [
 ];
 
 const PAGE_SIZE = 10;
-
-const SERVER_OPTIONS = {
-  useCursorPagination: false,
-};
 
 export default function TableExperts() {
   const [rows, setRows] = useState([]);

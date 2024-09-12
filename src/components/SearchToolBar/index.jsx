@@ -22,6 +22,7 @@ import { useSearchParams } from 'react-router-dom';
 import IconButton from '@mui/material/IconButton';
 import { FirstPage, KeyboardArrowLeft, KeyboardArrowRight, LastPage } from '@mui/icons-material';
 import PropTypes from 'prop-types';
+import pushToast from '~/helpers/sonnerToast.js';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -278,12 +279,12 @@ export function SearchBoxWhat({
   }, [searchValue, size, start]);
 
   const handleSearch = (e) => {
-    // clearTimeout(timeoutRef.current);
-    // const value = e.target.value;
-    // timeoutRef.current = setTimeout(() => {
-    //   setSearchValue(value);
-    // }, 500);
-    setSearchValue(e?.target?.value);
+    clearTimeout(timeoutRef.current);
+    const value = e.target.value;
+    timeoutRef.current = setTimeout(() => {
+      setSearchValue(value);
+    }, 300);
+    // setSearchValue(e?.target?.value);
   }
 
   return (
@@ -351,12 +352,12 @@ export function SearchBoxWhere({
   }, [searchValue, size, start]);
 
   const handleSearch = (e) => {
-    // clearTimeout(timeoutRef.current);
-    // const value = e.target.value;
-    // timeoutRef.current = setTimeout(() => {
-    //   setSearchValue(value);
-    // }, 500);
-    setSearchValue(e?.target?.value);
+    clearTimeout(timeoutRef.current);
+    const value = e.target.value;
+    timeoutRef.current = setTimeout(() => {
+      setSearchValue(value);
+    }, 300);
+    // setSearchValue(e?.target?.value);
   }
 
   return (
@@ -466,6 +467,7 @@ export default function SearchToolBar({
   const onError = (errors, e) => {
     Object.values(errors).reverse().forEach((error) => {
       console.log(error.message);
+      pushToast(error.message, 'error');
     });
   }
 
