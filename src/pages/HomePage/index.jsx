@@ -1,6 +1,6 @@
 import Box from '@mui/material/Box';
 import { Container, useTheme } from '@mui/material';
-import SearchToolBar from '~/components/SearchToolBar/index.jsx';
+import SearchToolBar from '~/components/SearchExpertToolBar/index.jsx';
 
 export default function HomePage() {
   const theme = useTheme();

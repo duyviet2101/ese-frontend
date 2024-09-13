@@ -61,17 +61,18 @@ export default function CreateThesis() {
     } else if (data?.candidate?.gender === "Nữ") {
       data.candidate.gender = 0;
     }
-    console.log(data);
     const res = await Request.post("/theses", data);
     if (res?.status === 'error') {
       pushToast(res?.message, "error");
-      console.log(res);
+    } else {
+      pushToast("Tạo luận án thành công", "success");
+      navigate("/thesis");
     }
   }
 
-  const onError = (errors, e) => {
-    pushToast("Có lỗi xảy ra, vui lòng kiểm tra lại!", "error");
-  }
+    const onError = (errors, e) => {
+      pushToast("Có lỗi xảy ra, vui lòng kiểm tra lại!", "error");
+    }
 
   return (
     <>

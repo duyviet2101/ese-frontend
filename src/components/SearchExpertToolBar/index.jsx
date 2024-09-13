@@ -19,9 +19,6 @@ import Button from '@mui/material/Button';
 import { useForm } from 'react-hook-form';
 import MenuItem from '@mui/material/MenuItem';
 import { useSearchParams } from 'react-router-dom';
-import IconButton from '@mui/material/IconButton';
-import { FirstPage, KeyboardArrowLeft, KeyboardArrowRight, LastPage } from '@mui/icons-material';
-import PropTypes from 'prop-types';
 import pushToast from '~/helpers/sonnerToast.js';
 
 const ITEM_HEIGHT = 48;
@@ -299,6 +296,7 @@ export function SearchBoxWhat({
           <TextField
             {...params}
             label="Tìm kiếm theo tên, chủ đề,..."
+            value={searchValue}
             InputProps={{
               ...params.InputProps,
               type: 'search',
@@ -320,7 +318,8 @@ export function SearchBoxWhat({
               )
             }}
             {...register("what", {
-              onChange: handleSearch
+              onChange: handleSearch,
+              value: searchValue
             })}
           />
         )}
@@ -371,6 +370,7 @@ export function SearchBoxWhere({
         renderInput={(params) => (
           <TextField
             {...params}
+            value={searchValue}
             label="Tìm kiếm theo đơn vị công tác, địa chỉ..."
             InputProps={{
               ...params.InputProps,
@@ -393,7 +393,8 @@ export function SearchBoxWhere({
               )
             }}
             {...register("where", {
-              onChange: handleSearch
+              onChange: handleSearch,
+              value: searchValue
             })}
           />
         )}
@@ -414,9 +415,9 @@ export default function SearchToolBar({
   const [topics, setTopics] = useState([]);
   const [degrees, setDegrees] = useState([]);
   const [companies, setCompanies] = useState([]);
-  const [searchParams, setSearchParams] = useSearchParams({
-    facets: 'research_area:20,degree:20,company:20',
-  });
+  const [searchParams, setSearchParams] = useSearchParams(
+    new URLSearchParams(location.search + '&facets=research_area:20,degree:20,company:20')
+  );
 
   const {
     register,
@@ -452,16 +453,14 @@ export default function SearchToolBar({
       research_area = typeof research_area === 'string' ? research_area : research_area?.join(",");
     }
 
-    const params = new URLSearchParams({
-      what: what??'',
-      where: where??'',
-      research_area: research_area??'',
-      degree: degree??'',
-      company: company??'',
-      facets: 'research_area:20,degree:20,company:20',
-    });
+    searchParams.set('what', what || '');
+    searchParams.set('where', where || '');
+    searchParams.set('research_area', research_area || '');
+    searchParams.set('degree', degree || '');
+    searchParams.set('company', company || '');
+    searchParams.set('facets', 'research_area:20,degree:20,company:20');
     // console.log(params.toString());
-    setSearchParams(params);
+    setSearchParams(searchParams);
   }
 
   const onError = (errors, e) => {
@@ -482,11 +481,12 @@ export default function SearchToolBar({
       degree: '',
       company: '',
     });
-    setSearchParams({
-      facets: 'research_area:20,degree:20,company:20',
-      what: searchParams.get('what'),
-      where: searchParams.get('where'),
-    })
+
+    searchParams.delete('research_area');
+    searchParams.delete('degree');
+    searchParams.delete('company');
+
+    setSearchParams(searchParams);
     // setRows([]);
   }
 

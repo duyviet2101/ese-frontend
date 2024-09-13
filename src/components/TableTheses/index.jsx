@@ -1,11 +1,14 @@
 import Box from '@mui/material/Box';
-import { SearchNameBox, SelectDate, SelectStatus } from '~/components/SelectFiltersTheses/index.jsx';
+import SearchTheseToolbar, { SearchNameBox, SelectDate, SelectStatus } from '~/components/SearchTheseToolbar/index.jsx';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import { DataGrid } from '@mui/x-data-grid';
 import Tooltip from '@mui/material/Tooltip';
 import { Chip } from '@mui/material';
 import { Link } from 'react-router-dom';
+import { useMemo, useRef, useState } from 'react';
+import moment from 'moment';
+import pushToast from '~/helpers/sonnerToast.js';
 
 const status = [
   {
@@ -15,12 +18,12 @@ const status = [
   },
   {
     label: "Chưa tìm hội đồng",
-    value: "backlog",
+    value: "not_started",
     color: "warning"
   },
   {
     label: "Đang liên lạc",
-    value: "in-progress",
+    value: "waiting",
     color: "info"
   },
   {
@@ -31,23 +34,23 @@ const status = [
 ];
 
 const columns = [
-  { field: 'id', headerName: 'STT', width: 40 },
-  { field: 'name', headerName: 'Tên luận án', width: 130 },
+  // { field: 'id', headerName: 'STT', width: 40 },
+  { field: 'title', headerName: 'Tên luận án', width: 130 },
   {
     headerName: "Cấp độ",
-    field: "level",
+    field: "degree",
     width: 70,
   },
   {
-    headerName: "Chủ đề",
-    field: "topics",
+    headerName: "Từ khoá",
+    field: "keywords",
     width: 130,
     renderCell: (params) => {
-      return params.row.topics.map((topic, index) => (
-        <Tooltip title={topic} key={index}>
+      return params?.row?.keywords?.map((keyword, index) => (
+        <Tooltip title={keyword} key={index}>
           <Chip
             key={index}
-            label={topic}
+            label={keyword}
             size="small"
             color={"primary"}
             variant={"outlined"}
@@ -62,30 +65,66 @@ const columns = [
   },
   {
     headerName: "Ngày bảo vệ",
-    field: "deadline",
+    field: "defense_date",
     width: 110,
+    renderCell: (params) => {
+      return moment(params.row.defense_date).format("DD/MM/YYYY");
+    }
   },
   {
     headerName: "Người bảo vệ",
-    field: "person",
+    field: "candidate.name",
     width: 130,
+    renderCell: (params) => {
+      return params.row?.candidate?.name;
+    }
   },
   {
     headerName: "Số điện thoại",
-    field: "phoneNumber",
-    width: 110,
+    field: "candidate.phone",
+    width: 130,
+    renderCell: (params) => {
+      const handleCopy = (value) => {
+        navigator.clipboard.writeText(value);
+        pushToast("Đã sao chép " + value + " vào bộ nhớ tạm!", "success");
+      }
+
+      return (
+        <Tooltip title={params.row?.candidate?.phone}
+                 key={params.row?.candidate?.phone}>
+          <Chip
+            key={params.row?.candidate?.phone}
+            label={params.row?.candidate?.phone}
+            size="small"
+            color={"primary"}
+            variant={"outlined"}
+            sx={{
+              marginRight: 0.5,
+              marginBottom: 0.5
+            }}
+            onClick={(e) => {
+              handleCopy(params.row?.candidate?.phone);
+              e.stopPropagation();
+            }}
+          />
+        </Tooltip>
+      )
+    }
   },
   {
     headerName: "Trạng thái",
-    field: "status",
+    field: "committees.status",
     width: 170,
     renderCell: (params) => {
-      const index = status.findIndex((item) => item.value === params.row.status);
+      const value = params.row.committees.status;
+      const label = status.find((item) => item.value === value)?.label || "Không xác định";
+      const color = status.find((item) => item.value === value)?.color || "default";
+
       return (
-        <Tooltip title={status[index].label}>
+        <Tooltip title={label}>
           <Chip
-            label={status[index].label}
-            color={status[index].color}
+            label={label}
+            color={color}
             clickable={false}
             size={"small"}
             sx={{
@@ -116,7 +155,7 @@ const columns = [
             label="Tìm kiếm hội đồng"
             component={Link}
             size={"small"}
-            to={"/search-experts"}
+            to={`/search-experts?thesis-id=${params.row._id}&what=${params.row.keywords.join(",")}`}
             clickable
             color={"primary"}
             onClick={(event) => event.stopPropagation()}
@@ -138,119 +177,27 @@ const columns = [
   }
 ];
 
+const PAGE_SIZE = 10;
+
 export default function TableTheses() {
-  const rows = [
-    {
-      "id": 1,
-      "avatar": "https://www.w3schools.com/howto/img_avatar.png",
-      "name": "Luận Án 1",
-      "level": "ThS",
-      "topics": ["AI"],
-      "deadline": "01/01/2024",
-      "person": "ĐH Bách Khoa",
-      "phoneNumber": "0123456780",
-      "status": "in-progress"
-    },
-    {
-      "id": 2,
-      "avatar": "https://www.w3schools.com/howto/img_avatar.png",
-      "name": "Luận Án 2",
-      "level": "TS",
-      "topics": ["Data Science", "AI", "IT"],
-      "deadline": "01/01/2024",
-      "person": "ĐH Khoa học Tự nhiên",
-      "phoneNumber": "0123456781",
-      "status": "backlog"
-    },
-    {
-      "id": 3,
-      "avatar": "https://www.w3schools.com/howto/img_avatar.png",
-      "name": "Luận Án 3",
-      "level": "PGS",
-      "topics": ["Robotics"],
-      "deadline": "01/01/2024",
-      "person": "ĐH Kinh tế Quốc dân",
-      "phoneNumber": "0123456782",
-      "status": "backlog"
-    },
-    {
-      "id": 4,
-      "avatar": "https://www.w3schools.com/howto/img_avatar.png",
-      "name": "Luận Án 4",
-      "level": "GS",
-      "topics": ["Software Engineering"],
-      "deadline": "01/01/2024",
-      "person": "ĐH Sư phạm",
-      "phoneNumber": "0123456783",
-      "status": "done"
-    },
-    {
-      "id": 5,
-      "avatar": "https://www.w3schools.com/howto/img_avatar.png",
-      "name": "Luận Án 5",
-      "level": "ThS",
-      "topics": ["AI"],
-      "deadline": "01/01/2024",
-      "person": "ĐH Bách Khoa",
-      "phoneNumber": "0123456784",
-      "status": "done"
-    },
-    {
-      "id": 6,
-      "avatar": "https://www.w3schools.com/howto/img_avatar.png",
-      "name": "Luận Án 6",
-      "level": "TS",
-      "topics": ["Data Science"],
-      "deadline": "01/01/2024",
-      "person": "ĐH Khoa học Tự nhiên",
-      "phoneNumber": "0123456785",
-      "status": "in-progress"
-    },
-    {
-      "id": 7,
-      "avatar": "https://www.w3schools.com/howto/img_avatar.png",
-      "name": "Luận Án 7",
-      "level": "PGS",
-      "topics": ["Robotics"],
-      "deadline": "01/01/2024",
-      "person": "ĐH Kinh tế Quốc dân",
-      "phoneNumber": "0123456786",
-      "status": "in-progress"
-    },
-    {
-      "id": 8,
-      "avatar": "https://www.w3schools.com/howto/img_avatar.png",
-      "name": "Luận Án 8",
-      "level": "GS",
-      "topics": ["Software Engineering"],
-      "deadline": "01/01/2024",
-      "person": "ĐH Sư phạm",
-      "phoneNumber": "0123456787",
-      "status": "in-progress"
-    },
-    {
-      "id": 9,
-      "avatar": "https://www.w3schools.com/howto/img_avatar.png",
-      "name": "Luận Án 9",
-      "level": "ThS",
-      "topics": ["AI"],
-      "deadline": "01/01/2024",
-      "person": "ĐH Bách Khoa",
-      "phoneNumber": "0123456788",
-      "status": "in-progress"
-    },
-    {
-      "id": 10,
-      "avatar": "https://www.w3schools.com/howto/img_avatar.png",
-      "name": "Luận Án 10",
-      "level": "TS",
-      "topics": ["Data Science"],
-      "deadline": "01/01/2024",
-      "person": "ĐH Khoa học Tự nhiên",
-      "phoneNumber": "0123456789",
-      "status": "in-progress"
+  const [rows, setRows] = useState([]);
+  const [paginationModel, setPaginationModel] = useState({
+    page: 0,
+    pageSize: PAGE_SIZE
+  });
+
+  const [pageInfo, setPageInfo] = useState({
+    totalRowCount: 0,
+  });
+
+  const rowCountRef = useRef(pageInfo?.totalRowCount || 0);
+
+  const rowCount = useMemo(() => {
+    if (pageInfo?.totalRowCount !== undefined) {
+      rowCountRef.current = pageInfo.totalRowCount;
     }
-  ];
+    return rowCountRef.current;
+  }, [pageInfo?.totalRowCount]);
 
   return (
     <Box
@@ -264,62 +211,23 @@ export default function TableTheses() {
         gap: 1,
       }}
     >
-      <Box
-        sx={{
-          display: 'flex',
-          gap: 1,
-          flexBasis: "100%",
-          height: "40px",
-          marginBottom: 1
-        }}
-      >
-        <SearchNameBox />
-        <Button
-          variant="contained"
-          sx={{
-            textWrap: "none",
-            whiteSpace: "nowrap",
-            height: "100%",
-            backgroundColor: "rgb(0,128,255)",
-            "&:hover": {
-              backgroundColor: "rgb(0,128,255)",
-            },
-          }}
-        >
-          Tìm kiếm
-        </Button>
-        <Button
-          sx={{
-            textWrap: "none",
-            whiteSpace: "nowrap",
-            height: "100%",
-            paddingX: "15px"
-          }}
-        >
-          Xoá bộ lọc
-        </Button>
-      </Box>
-      <Box
-        sx={{
-          display: 'flex',
-          gap: 1,
-          alignItems: 'end',
-        }}
-      >
-        <SelectDate />
-        <SelectStatus />
-      </Box>
+      <SearchTheseToolbar
+        setRows={setRows}
+        setPageInfo={setPageInfo}
+        pageSize={PAGE_SIZE}
+        paginationModel={paginationModel}
+      />
       <Divider />
       <div style={{ height: 800, width: '100%' }}>
         <DataGrid
           rows={rows}
           columns={columns}
-          initialState={{
-            pagination: {
-              paginationModel: { page: 0, pageSize: 10 },
-            },
-          }}
-          pageSizeOptions={[5, 10]}
+          rowCount={rowCount}
+          paginationModel={paginationModel}
+          paginationMode={"server"}
+          onPaginationModelChange={setPaginationModel}
+          pageSizeOptions={[PAGE_SIZE]}
+          getRowId={(row) => row._id}
           getRowHeight={() => "auto"}
           sx={{
             "& .MuiDataGrid-columnsContainer": {

@@ -11,7 +11,7 @@ import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import Autocomplete from '@mui/material/Autocomplete';
 import dayjs from 'dayjs';
-import {SelectTopics} from '~/components/SearchToolBar/index.jsx';
+import {SelectTopics} from '~/components/SearchExpertToolBar/index.jsx';
 import MenuItem from '@mui/material/MenuItem';
 import { useState } from 'react';
 import TableExpertsThesisDetail from '~/components/TableExpertsThesisDetail/index.jsx';
