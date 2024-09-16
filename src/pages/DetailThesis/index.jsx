@@ -289,7 +289,6 @@ export default function DetailThesis() {
                 marginY: 2
               }}
             />
-            <SelectTopics defaultValues={["Học máy", "Cơ khí"]}/>
             <Autocomplete
               options={levels}
               defaultValue={levels[0]}

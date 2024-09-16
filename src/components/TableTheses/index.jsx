@@ -155,7 +155,7 @@ const columns = [
             label="Tìm kiếm hội đồng"
             component={Link}
             size={"small"}
-            to={`/search-experts?thesis-id=${params.row._id}&what=${params.row.keywords.join(",")}`}
+            to={`/thesis/${params.row._id}/search-experts?what=${params.row.keywords.join(",")}`}
             clickable
             color={"primary"}
             onClick={(event) => event.stopPropagation()}

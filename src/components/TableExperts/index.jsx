@@ -1,60 +1,14 @@
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
-import { Chip, FormControl, Select } from '@mui/material';
+import { Chip } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import Tooltip from '@mui/material/Tooltip';
 import { useMemo, useRef, useState } from 'react';
-import MenuItem from '@mui/material/MenuItem';
 import SearchToolBar from '~/components/SearchExpertToolBar/index.jsx';
 import pushToast from '~/helpers/sonnerToast.js';
 
-function SelectRole(initRole = "") {
-  const roles = [
-    { value: "", label: "Chọn", color: "default" },
-    { value: "chair", label: "Chủ tịch", color: "primary" },
-    { value: "member", label: "Thành viên", color: "primary" },
-  ]
-
-  const [roleState, setRoleState] = useState(initRole);
-
-  const handleChangeStatus = (event) => {
-    setRoleState(event.target.value);
-  }
-
-  return (
-    <FormControl>
-      <Select
-        id="select-action-input"
-        value={roleState}
-        displayEmpty
-        onChange={handleChangeStatus}
-        disableUnderline
-        variant={"standard"}
-        sx={{
-          "& .MuiSelect-select": {
-            padding: 0,
-            border: "none"
-          },
-          '.MuiOutlinedInput-notchedOutline': { border: 0 }
-        }}
-      >
-        {roles.map((item, index) => (
-          <MenuItem key={index} value={item.value}>
-            <Chip
-              label={item.label}
-              color={item.color}
-            />
-          </MenuItem>
-        ))}
-      </Select>
-    </FormControl>
-  )
-
-}
-
 const columns = [
-  // { field: 'id', headerName: 'STT', width: 40 },
   {
     headerName: "Avatar",
     field: "img",
@@ -80,7 +34,10 @@ const columns = [
           }}
         />
       </Box>
-    )
+    ),
+    valueFormatter: (value) => {
+
+    }
   },
   { field: 'name', headerName: 'Họ và tên', width: 130 },
   {
@@ -91,7 +48,7 @@ const columns = [
   {
     headerName: "Lĩnh vực nghiên cứu",
     field: "research_area",
-    width: 170,
+    width: 190,
     renderCell: (params) => {
       return params.row.research_area.map((area, index) => (
           <Tooltip title={area.name} key={index}>
@@ -108,6 +65,9 @@ const columns = [
             />
           </Tooltip>
         ));
+    },
+    valueFormatter: (value) => {
+      return value.map((area) => area.name).join(", ");
     }
   },
   {
@@ -118,7 +78,7 @@ const columns = [
   {
     headerName: "Địa chỉ",
     field: "address",
-    width: 150,
+    width: 190,
   },
   {
     headerName: "Giới tính",
@@ -126,12 +86,15 @@ const columns = [
     width: 70,
     renderCell: (params) => {
       return params.row.gender === 1 ? "Nam" : "Nữ";
+    },
+    valueFormatter: (value) => {
+      return value === 1 ? "Nam" : "Nữ";
     }
   },
   {
     headerName: "Profile/Liên lạc",
     field: "link_profile",
-    width: 150,
+    width: 170,
     renderCell: (params) => {
       const handleCopy = (value) => {
         navigator.clipboard.writeText(value);
@@ -193,17 +156,10 @@ const columns = [
         </Box>
       )
     },
-    disableClickEventBubbling: true
-  },
-  {
-    headerName: "Vai trò",
-    field: "role",
-    width: 150,
-    renderCell: (params) => {
-      return (
-        SelectRole(params.row.role)
-      )
-    }
+    disableClickEventBubbling: true,
+    valueFormatter: (value) => {
+      return value || "Chưa cập nhật";
+    },
   }
 ];
 
@@ -284,6 +240,9 @@ export default function TableExperts() {
             '&.MuiDataGrid-root--densityCompact .MuiDataGrid-cell': { py: '8px' },
             '&.MuiDataGrid-root--densityStandard .MuiDataGrid-cell': { py: '15px' },
             '&.MuiDataGrid-root--densityComfortable .MuiDataGrid-cell': { py: '22px' },
+          }}
+          slots={{
+            toolbar: GridToolbar
           }}
         />
       </div>

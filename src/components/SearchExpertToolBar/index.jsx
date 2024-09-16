@@ -1,7 +1,5 @@
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import {
   Chip,
   FormControl,
@@ -562,6 +560,7 @@ export default function SearchToolBar({
             paddingX: "10px"
           }}
           onClick={onReset}
+          variant={"outlined"}
         >
           Xoá bộ lọc
         </Button>
