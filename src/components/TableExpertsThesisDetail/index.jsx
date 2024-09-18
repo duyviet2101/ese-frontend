@@ -7,11 +7,11 @@ import { memo, useState } from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import pushToast from '~/helpers/sonnerToast.js';
 import { useForm } from 'react-hook-form';
-import { pick } from 'lodash';
 import Request from '~/utils/request.js';
 import { useParams } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import InfoExpertDrawer from '~/components/InfoExpertDrawer/index.jsx';
+import { isEqual } from 'lodash/lang.js';
 
 const columns = ({
   register = null,
@@ -203,6 +203,7 @@ export default function TableExpertsThesisDetail({
 }) {
   const {id} = useParams();
   const [status, setStatus] = useState(thesis?.committees?.status ?? COMMITTEE_STATUSES.not_started.value);
+  const [isFinal, setIsFinal] = useState(false);
 
   const [rows, setRows] = useState(thesis?.committees?.list?.map(item => {
     delete item?.expert?.id;
@@ -213,6 +214,9 @@ export default function TableExpertsThesisDetail({
     })
   }) ?? []);
   const [rowSelectionModel, setRowSelectionModel] = useState([]);
+  const [filterModel, setFilterModel] = useState({
+    items: [],
+  });
 
   const {
     register,
@@ -287,6 +291,27 @@ export default function TableExpertsThesisDetail({
     }
   }
 
+  console.log(filterModel)
+  const handleShowFinalList = () => {
+    setFilterModel({
+      items: [
+        {
+          field: "contact_status",
+          operator: "contains",
+          value: "accepted"
+        }
+      ]
+    })
+    setIsFinal(true);
+  }
+
+  const handleShowTempList = () => {
+    setFilterModel({
+      items: []
+    })
+    setIsFinal(false);
+  }
+
   return (
     <>
       <form
@@ -336,13 +361,36 @@ export default function TableExpertsThesisDetail({
             </Select>
           </FormControl>
 
-          <Button
-            variant={"contained"}
-            color={"error"}
-            onClick={handleDelete}
+          <Box
+            sx={{
+              display: 'flex',
+              gap: 2,
+              justifyContent: 'flex-end'
+            }}
           >
-            Xoá
-          </Button>
+            {!isFinal ? (<Button
+              variant={'contained'}
+              color={'info'}
+              onClick={handleShowFinalList}
+            >
+              Xem danh sách chính thức
+            </Button>) : (
+              <Button
+                variant={'contained'}
+                color={'info'}
+                onClick={handleShowTempList}
+              >
+                Xem danh sách tạm thời
+              </Button>
+            )}
+            <Button
+              variant={"contained"}
+              color={"error"}
+              onClick={handleDelete}
+            >
+              Xoá
+            </Button>
+          </Box>
         </Box>
         <DataGrid
           rows={rows}
@@ -357,6 +405,11 @@ export default function TableExpertsThesisDetail({
           rowSelectionModel={rowSelectionModel}
           onRowSelectionModelChange={(newRowSelectionModel) => {
             setRowSelectionModel(newRowSelectionModel);
+          }}
+          filterModel={filterModel}
+          onFilterModelChange={(newModel) => {
+            if (isEqual(newModel, filterModel)) return;
+            setFilterModel(newModel);
           }}
           pageSizeOptions={[5, 10]}
           checkboxSelection
