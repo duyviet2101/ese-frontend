@@ -166,7 +166,7 @@ const columns = [
             label="Chi tiết/Cập nhật"
             component={Link}
             size={"small"}
-            to={`/thesis/${params.row.id}`}
+            to={`/thesis/${params.row._id}`}
             clickable
             onClick={(event) => event.stopPropagation()}
           />

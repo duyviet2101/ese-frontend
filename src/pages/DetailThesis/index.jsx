@@ -5,25 +5,48 @@ import Box from '@mui/material/Box';
 import { MdOutlinePersonOutline } from 'react-icons/md';
 import Divider from '@mui/material/Divider';
 import { FaRegClock, FaSchool } from 'react-icons/fa';
-import { Link, useNavigate } from 'react-router-dom';
-import TextField from '@mui/material/TextField';
-import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import Autocomplete from '@mui/material/Autocomplete';
-import dayjs from 'dayjs';
-import {SelectTopics} from '~/components/SearchExpertToolBar/index.jsx';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import MenuItem from '@mui/material/MenuItem';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import TableExpertsThesisDetail from '~/components/TableExpertsThesisDetail/index.jsx';
+import UpdateForm from '~/pages/DetailThesis/UpdateForm.jsx';
+import Request from '~/utils/request.js';
+import moment from 'moment';
+import { isEmpty } from 'lodash';
+
+const COMMITTEE_STATUSES = {
+  not_started: {
+    name: 'Chưa bắt đầu',
+    value: 'not_started',
+    color: 'default',
+  },
+  waiting: {
+    name: 'Đang tìm kiếm',
+    value: 'waiting',
+    color: 'warning',
+  },
+  done: {
+    name: 'Đã chốt hội đồng',
+    value: 'done',
+    color: 'success',
+  }
+}
 
 export default function DetailThesis() {
   const navigate = useNavigate();
-  const [status, setStatus] = useState('');
   const [action, setAction] = useState('');
+  const { id } = useParams();
+  const [thesis, setThesis] = useState({});
 
-  const handleChangeStatus = (event) => {
-    setStatus(event.target.value);
-  };
+
+  useEffect(() => {
+    const fetchThesis = async () => {
+      const res = await Request.get(`/theses/${id}`);
+      setThesis(res);
+    }
+    fetchThesis();
+  }, [id]);
+
   const handleChangeAction = (event) => {
     setAction(event.target.value);
   }
@@ -73,6 +96,7 @@ export default function DetailThesis() {
             display: 'flex',
             alignItems: 'center',
             gap: '10px',
+            marginBottom: '20px'
           }}
         >
           <Box
@@ -82,7 +106,7 @@ export default function DetailThesis() {
               gap: 1
             }}
           >
-            <Typography variant="h2" fontSize={"24px"} fontWeight={600}>Luận án: Điều tra chọn mẫu và sự vận dụng trong thống kê Việt Nam</Typography>
+            <Typography variant="h2" fontSize={"24px"} fontWeight={600}>Luận án: {thesis?.title}</Typography>
             <Box
               sx={{
                 display: "flex",
@@ -98,7 +122,7 @@ export default function DetailThesis() {
                   gap: 0.5
                 }}
               >
-                <MdOutlinePersonOutline/> Nguyễn Văn A
+                <MdOutlinePersonOutline/> {thesis?.candidate?.name}
               </Typography>
               <Divider orientation="vertical" flexItem />
               <Typography
@@ -110,224 +134,18 @@ export default function DetailThesis() {
                   gap: 0.5
                 }}
               >
-                <FaRegClock/> 12/12/2021
-              </Typography>
-              <Divider orientation="vertical" flexItem />
-              <Typography
-                variant="h3"
-                fontSize={"16px"}
-                sx={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 0.5
-                }}
-              >
-                <FaSchool/> NEU
+                <FaRegClock/> {moment(thesis?.defense_date).format('DD/MM/YYYY')}
               </Typography>
               <Divider orientation="vertical" flexItem />
               <Chip
-                variant="outlined"
-                color="success"
-                label={"Đã có danh sách hội đồng"}
+                variant="filled"
+                color={COMMITTEE_STATUSES[thesis?.committees?.status]?.color}
+                label={COMMITTEE_STATUSES[thesis?.committees?.status]?.name}
               />
             </Box>
           </Box>
         </Box>
-        <Box
-          sx={{
-            padding: "20px",
-            backgroundColor: "#f1f1f1",
-            borderRadius: "10px",
-            display: "flex",
-            flexWrap: "wrap",
-            gap: "10px",
-            justifyContent: "space-between",
-            marginTop: '20px',
-          }}
-        >
-          <Box
-            sx={{
-              display: 'flex',
-              gap: 1,
-              justifyContent: 'space-between',
-              width: "100%"
-            }}
-          >
-            <Typography
-              variant={"h5"}
-              flexBasis={"100%"}
-            >
-              Thông tin chung
-            </Typography>
-            <Button
-              variant="contained"
-              sx={{
-                backgroundColor: "#007bff",
-                color: "#fff",
-                minWidth: "150px",
-                "&:hover": {
-                  backgroundColor: "#0056b3"
-                },
-              }}
-            >
-              Cập nhật
-            </Button>
-          </Box>
-          <Divider
-            sx={{
-              width: "100%"
-            }}
-          />
-          <Typography
-            variant={"h6"}
-            flexBasis={"100%"}
-          >
-            Người bảo vệ
-          </Typography>
-          <Box
-            flexBasis={"45%"}
-          >
-            <TextField
-              label="Họ và tên"
-              variant="outlined"
-              size={"small"}
-              fullWidth
-              defaultValue={"Nguyễn Văn A"}
-              sx={{
-                marginTop: 2
-              }}
-            />
-            <TextField
-              label="Email"
-              size={"small"}
-              variant="outlined"
-              defaultValue={"test@gmail.com"}
-              fullWidth
-              sx={{
-                marginTop: 2
-              }}
-            />
-            <TextField
-              label="Số điện thoại"
-              size={"small"}
-              variant="outlined"
-              defaultValue={"0123456789"}
-              fullWidth
-              sx={{
-                marginTop: 2
-              }}
-            />
-          </Box>
-          <Box
-            flexBasis={"45%"}
-          >
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                defaultValue={dayjs("01/01/1990", "DD/MM/YYYY")}
-                label="Ngày sinh"
-                slotProps={{
-                  textField: {
-                    size: "small"
-                  }
-                }}
-                sx={{
-                  marginTop: 2,
-                  width: "100%"
-                }}
-                format={"DD/MM/YYYY"}
-              />
-            </LocalizationProvider>
-            <Autocomplete
-              options={["Nam", "Nữ", "Khác"]}
-              defaultValue={"Nam"}
-              getOptionLabel={(option) => option}
-              filterSelectedOptions
-              sx={{
-                marginTop: 2
-              }}
-              renderInput={(params) =>
-                <TextField
-                  {...params}
-                  label="Giới tính"
-                  size={"small"}
-                />
-              }
-            />
-            <TextField
-              label="Trường/Khoa/Viện"
-              defaultValue={"NEU"}
-              size={"small"}
-              variant="outlined"
-              fullWidth
-              sx={{
-                marginTop: 2
-              }}
-            />
-          </Box>
-          <Divider
-            sx={{
-              marginTop: 2,
-              width: "100%"
-            }}
-          />
-          <Typography
-            variant={"h6"}
-            flexBasis={"100%"}
-          >
-            Luận án
-          </Typography>
-          <Box
-            flexBasis={"45%"}
-          >
-            <TextField
-              label="Tên luận án"
-              defaultValue={"Điều tra chọn mẫu và sự vận dụng trong thống kê Việt Nam"}
-              size={"small"}
-              variant="outlined"
-              fullWidth
-              sx={{
-                marginY: 2
-              }}
-            />
-            <Autocomplete
-              options={levels}
-              defaultValue={levels[0]}
-              getOptionLabel={(option) => option.title}
-              filterSelectedOptions
-              isOptionEqualToValue={(option, value) => option.value === value.value}
-              sx={{
-                marginTop: 2
-              }}
-              renderInput={(params) =>
-                <TextField
-                  {...params}
-                  label="Cấp độ"
-                  size={"small"}
-                />
-              }
-            />
-          </Box>
-          <Box
-            flexBasis={"45%"}
-          >
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DatePicker
-                label="Ngày bảo vệ"
-                defaultValue={dayjs("01/01/2022", "DD/MM/YYYY")}
-                slotProps={{
-                  textField: {
-                    size: "small"
-                  }
-                }}
-                sx={{
-                  marginTop: 2,
-                  width: "100%"
-                }}
-                format={"DD/MM/YYYY"}
-              />
-            </LocalizationProvider>
-          </Box>
-        </Box>
+        {!(isEmpty(thesis)) && <UpdateForm thesis={thesis} />}
         <Box
           sx={{
             padding: "20px",
@@ -361,25 +179,7 @@ export default function DetailThesis() {
               >
                 Danh sách hội đồng
               </Typography>
-              <FormControl
-                size={"small"}
-                sx={{
-                  minWidth: "150px"
-                }}
-              >
-                <InputLabel id="select-status">Trạng thái</InputLabel>
-                <Select
-                  labelId="select-status"
-                  id="select-status-input"
-                  value={status}
-                  label="Trạng thái"
-                  onChange={handleChangeStatus}
-                >
-                  <MenuItem value={"backlog"}>Chưa tìm hội đồng</MenuItem>
-                  <MenuItem value={"in-progress"}>Đang liên lạc</MenuItem>
-                  <MenuItem value={"done"}>Đã có hội đồng</MenuItem>
-                </Select>
-              </FormControl>
+
             </Box>
             <Box
               sx={{
@@ -389,28 +189,10 @@ export default function DetailThesis() {
                 justifyContent: "flex-end"
               }}
             >
-              <FormControl
-                size={"small"}
-                sx={{
-                  minWidth: "150px"
-                }}
-              >
-                <InputLabel id="select-action">Hành động</InputLabel>
-                <Select
-                  labelId="select-action"
-                  id="select-action-input"
-                  value={action}
-                  label="Hành động"
-                  onChange={handleChangeAction}
-                >
-                  <MenuItem value={""}>Không</MenuItem>
-                  <MenuItem value={"delete"}>Xoá</MenuItem>
-                </Select>
-              </FormControl>
               <Button
                 variant="contained"
                 component={Link}
-                to={"/search-experts"}
+                to={`/thesis/${id}/search-experts?what=${thesis?.keywords?.join(',')}`}
                 sx={{
                   backgroundColor: "#007bff",
                   color: "#fff",
@@ -422,19 +204,21 @@ export default function DetailThesis() {
               >
                 Tìm kiếm hội đồng
               </Button>
-              <Button
-                variant="contained"
-                sx={{
-                  backgroundColor: "#007bff",
-                  color: "#fff",
-                  minWidth: "150px",
-                  "&:hover": {
-                    backgroundColor: "#0056b3"
-                  },
-                }}
-              >
-                Cập nhật
-              </Button>
+              {/*<Button*/}
+              {/*  variant="contained"*/}
+              {/*  sx={{*/}
+              {/*    backgroundColor: "#007bff",*/}
+              {/*    color: "#fff",*/}
+              {/*    minWidth: "150px",*/}
+              {/*    "&:hover": {*/}
+              {/*      backgroundColor: "#0056b3"*/}
+              {/*    },*/}
+              {/*  }}*/}
+              {/*  type={"submit"}*/}
+              {/*  form={"form-experts"}*/}
+              {/*>*/}
+              {/*  Cập nhật*/}
+              {/*</Button>*/}
             </Box>
           </Box>
           <Divider
@@ -442,24 +226,9 @@ export default function DetailThesis() {
               width: "100%"
             }}
           />
-          <TableExpertsThesisDetail/>
+          {!isEmpty(thesis) && <TableExpertsThesisDetail thesis={thesis} />}
         </Box>
       </Container>
     </>
   );
 }
-
-const levels = [
-  {
-    title: "Tiến sĩ",
-    value: "TS",
-  },
-  {
-    title: "Thạc sĩ",
-    value: "ThS",
-  },
-  {
-    title: "Cử nhân",
-    value: "CN",
-  }
-]

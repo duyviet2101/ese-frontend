@@ -70,9 +70,9 @@ export default function CreateThesis() {
     }
   }
 
-    const onError = (errors, e) => {
-      pushToast("Có lỗi xảy ra, vui lòng kiểm tra lại!", "error");
-    }
+  const onError = (errors, e) => {
+    pushToast("Có lỗi xảy ra, vui lòng kiểm tra lại!", "error");
+  }
 
   return (
     <>

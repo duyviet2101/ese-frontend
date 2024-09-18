@@ -2,265 +2,371 @@ import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import { Chip, FormControl, InputLabel, Select } from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { useState } from 'react';
 import MenuItem from '@mui/material/MenuItem';
+import pushToast from '~/helpers/sonnerToast.js';
+import { useForm } from 'react-hook-form';
+import { pick } from 'lodash';
+import Request from '~/utils/request.js';
+import { useParams } from 'react-router-dom';
+import Button from '@mui/material/Button';
 
-const columns = [
-  { field: 'id', headerName: 'STT', width: 40 },
-  {
-    headerName: "Avatar",
-    field: "avatar",
-    width: 60,
-    renderCell: (params) => (
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'flex-start',
-          gap: 1,
-          width: "100%",
-          height: "100%"
-        }}
-      >
-        <Avatar
-          src={params.row.avatar}
-          alt=""
-          style={{
-            width: 30,
-            height: 30,
-            borderRadius: '50%',
+const columns = ({
+  register = null,
+}) => {
+  return [
+    {
+      headerName: "Avatar",
+      field: "img",
+      width: 60,
+      renderCell: (params) => (
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+            gap: 1,
+            width: "100%",
+            height: "100%"
           }}
-        />
-      </Box>
-    )
-  },
-  { field: 'name', headerName: 'Họ và tên', width: 130 },
-  {
-    headerName: "Học vị",
-    field: "degree",
-    width: 70,
-  },
-  {
-    headerName: "Lĩnh vực nghiên cứu",
-    field: "researchArea",
-    width: 130,
-    renderCell: (params) => {
-      return params.row.researchArea.map((area, index) => (
-        <Tooltip title={area} key={index}>
-          <Chip
-            key={index}
-            label={area}
-            size="small"
-            color={"primary"}
-            variant={"outlined"}
-            sx={{
-              marginRight: 0.5,
-              marginBottom: 0.5
+        >
+          <Avatar
+            src={"https://qldt.neu.edu.vn/QuanLyLLKH/Upload/Avatar/" + params.row.img}
+            alt=""
+            style={{
+              width: 30,
+              height: 30,
+              borderRadius: '50%',
             }}
           />
-        </Tooltip>
-      ));
-    }
-  },
-  {
-    headerName: "Đơn vị công tác",
-    field: "workUnit",
-    width: 130,
-  },
-  // {
-  //   headerName: "Địa chỉ",
-  //   field: "address",
-  //   width: 190,
-  // },
-  {
-    headerName: "Giới tính",
-    field: "gender",
-    width: 70,
-  },
-  {
-    headerName: "Số điện thoại",
-    field: "phoneNumber",
-    width: 110,
-  },
-  {
-    headerName: "Profile",
-    field: "profile",
-    width: 100,
-    renderCell: (params) => (
-      <Tooltip title={params.row.profile}>
-        <Chip
-          label="Chi tiết"
-          component="a"
-          href={params.row.profile}
-          target={"_blank"}
-          clickable
-          onClick={(event ) => event.stopPropagation()}
-        />
-      </Tooltip>
-    ),
-    disableClickEventBubbling: true
-  },
-  {
-    headerName: "Status",
-    field: "status",
-    width: 150,
-    renderCell: (params) => {
-      return (
-        SelectStatus(params.row.status)
-      )
-    }
-  }
-];
+        </Box>
+      ),
+    },
+    {
+      field: 'name',
+      headerName: 'Họ và tên',
+      width: 130,
+    },
+    {
+      headerName: "Học vị",
+      field: "degree",
+      width: 70,
+      renderCell: (params) => {
+        return params.row.degree;
+      }
+    },
+    {
+      headerName: "Lĩnh vực nghiên cứu",
+      field: "research_area",
+      width: 130,
+      renderCell: (params) => {
+        return params.row.research_area.map((area, index) => (
+          <Tooltip title={area.name} key={index}>
+            <Chip
+              key={index}
+              label={area.name}
+              size="small"
+              color={"primary"}
+              variant={"outlined"}
+              sx={{
+                marginRight: 0.5,
+                marginBottom: 0.5
+              }}
+            />
+          </Tooltip>
+        ));
+      },
+      valueFormatter: (value) => {
+        if (!value) return "Chưa cập nhật";
+        return value.map((area) => area.name).join(", ");
+      }
+    },
+    {
+      headerName: "Đơn vị công tác",
+      field: "company",
+      width: 130,
+    },
+    {
+      headerName: "Địa chỉ",
+      field: "address",
+      width: 130,
+    },
+    {
+      headerName: "Giới tính",
+      field: "gender",
+      width: 70,
+      renderCell: (params) => {
+        return params.row.gender === 1 ? "Nam" : "Nữ";
+      },
+      valueFormatter: (value) => {
+        return value === 1 ? "Nam" : "Nữ";
+      }
+    },
+    {
+      headerName: "Profile/Liên lạc",
+      field: "link_profile",
+      width: 170,
+      renderCell: (params) => {
+        const handleCopy = (value) => {
+          navigator.clipboard.writeText(value);
+          pushToast("Đã sao chép " + value + " vào bộ nhớ tạm!", "success");
+        }
 
-export default function TableExpertsThesisDetail() {
-  const rows = [
-    {
-      "id": 1,
-      "avatar": "https://www.w3schools.com/howto/img_avatar.png",
-      "name": "Nguyễn Văn 1",
-      "degree": "ThS",
-      "researchArea": ["AI"],
-      "workUnit": "ĐH Bách Khoa",
-      "address": "Số 10 Đường ABC, Quận XYZ, TP.HCM",
-      "gender": "Nam",
-      "phoneNumber": "0123456780",
-      "profile": "http://example.com/profile1",
-      "status": "in-progress"
+        return (
+          <Box
+            sx={{
+              display: 'flex',
+              gap: 1,
+              flexWrap: "wrap"
+            }}
+          >
+            <Tooltip title={params.row.link_profile}>
+              <Chip
+                label="Chi tiết"
+                component="a"
+                href={params.row.link_profile}
+                target={"_blank"}
+                clickable
+                onClick={(event) => event.stopPropagation()}
+              />
+            </Tooltip>
+            {params?.row?.phone?.trim() && <Tooltip title={params.row.phone}>
+              <Chip
+                label={params.row.phone}
+                variant={"outlined"}
+                color={"primary"}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  handleCopy(params.row.phone);
+                }}
+              />
+            </Tooltip>}
+            {params?.row?.email?.trim() && <Tooltip title={params.row.email}>
+              <Chip
+                label={params.row.email}
+                variant={"outlined"}
+                color={"primary"}
+                onClick={(event) => {
+                  event.stopPropagation();
+                  handleCopy(params.row.email);
+                }}
+              />
+            </Tooltip>}
+            {params?.row?.other_link?.trim() && <Tooltip title={params.row.other_link}>
+              <Chip
+                label={"Khác"}
+                variant={"outlined"}
+                href={params.row.other_link}
+                target={"_blank"}
+                clickable
+                component={"a"}
+                color={"primary"}
+                onClick={(event) => event.stopPropagation()}
+              />
+            </Tooltip>}
+          </Box>
+        )
+      },
+      disableClickEventBubbling: true,
+      valueFormatter: (value) => {
+        return value || "Chưa cập nhật";
+      },
     },
     {
-      "id": 2,
-      "avatar": "https://www.w3schools.com/howto/img_avatar.png",
-      "name": "Nguyễn Văn 2",
-      "degree": "TS",
-      "researchArea": ["Data Science", "AI", "IT"],
-      "workUnit": "ĐH Khoa học Tự nhiên",
-      "address": "Số 11 Đường ABC, Quận XYZ, TP.HCM",
-      "gender": "Nữ",
-      "phoneNumber": "0123456781",
-      "profile": "http://example.com/profile2",
-      "status": "in-progress"
+      headerName: "Vai trò",
+      field: "role",
+      renderCell: (params) => {
+        return (
+          <Chip
+            variant={"filled"}
+            label={roles.find(role => role.value === params.row.role)?.label}
+            color={roles.find(role => role.value === params.row.role)?.color}
+          />
+        )
+      }
     },
     {
-      "id": 3,
-      "avatar": "https://www.w3schools.com/howto/img_avatar.png",
-      "name": "Nguyễn Văn 3",
-      "degree": "PGS",
-      "researchArea": ["Robotics"],
-      "workUnit": "ĐH Kinh tế Quốc dân",
-      "address": "Số 12 Đường ABC, Quận XYZ, TP.HCM",
-      "gender": "Nam",
-      "phoneNumber": "0123456782",
-      "profile": "http://example.com/profile3",
-      "status": "in-progress"
-    },
-    {
-      "id": 4,
-      "avatar": "https://www.w3schools.com/howto/img_avatar.png",
-      "name": "Nguyễn Văn 4",
-      "degree": "GS",
-      "researchArea": ["Software Engineering"],
-      "workUnit": "ĐH Sư phạm",
-      "address": "Số 13 Đường ABC, Quận XYZ, TP.HCM",
-      "gender": "Nữ",
-      "phoneNumber": "0123456783",
-      "profile": "http://example.com/profile4",
-      "status": "in-progress"
-    },
-    {
-      "id": 5,
-      "avatar": "https://www.w3schools.com/howto/img_avatar.png",
-      "name": "Nguyễn Văn 5",
-      "degree": "ThS",
-      "researchArea": ["AI"],
-      "workUnit": "ĐH Bách Khoa",
-      "address": "Số 14 Đường ABC, Quận XYZ, TP.HCM",
-      "gender": "Nam",
-      "phoneNumber": "0123456784",
-      "profile": "http://example.com/profile5",
-      "status": "in-progress"
-    },
-    {
-      "id": 6,
-      "avatar": "https://www.w3schools.com/howto/img_avatar.png",
-      "name": "Nguyễn Văn 6",
-      "degree": "TS",
-      "researchArea": ["Data Science"],
-      "workUnit": "ĐH Khoa học Tự nhiên",
-      "address": "Số 15 Đường ABC, Quận XYZ, TP.HCM",
-      "gender": "Nữ",
-      "phoneNumber": "0123456785",
-      "profile": "http://example.com/profile6",
-      "status": "in-progress"
-    },
-    {
-      "id": 7,
-      "avatar": "https://www.w3schools.com/howto/img_avatar.png",
-      "name": "Nguyễn Văn 7",
-      "degree": "PGS",
-      "researchArea": ["Robotics"],
-      "workUnit": "ĐH Kinh tế Quốc dân",
-      "address": "Số 16 Đường ABC, Quận XYZ, TP.HCM",
-      "gender": "Nam",
-      "phoneNumber": "0123456786",
-      "profile": "http://example.com/profile7",
-      "status": "in-progress"
-    },
-    {
-      "id": 8,
-      "avatar": "https://www.w3schools.com/howto/img_avatar.png",
-      "name": "Nguyễn Văn 8",
-      "degree": "GS",
-      "researchArea": ["Software Engineering"],
-      "workUnit": "ĐH Sư phạm",
-      "address": "Số 17 Đường ABC, Quận XYZ, TP.HCM",
-      "gender": "Nữ",
-      "phoneNumber": "0123456787",
-      "profile": "http://example.com/profile8",
-      "status": "in-progress"
-    },
-    {
-      "id": 9,
-      "avatar": "https://www.w3schools.com/howto/img_avatar.png",
-      "name": "Nguyễn Văn 9",
-      "degree": "ThS",
-      "researchArea": ["AI"],
-      "workUnit": "ĐH Bách Khoa",
-      "address": "Số 18 Đường ABC, Quận XYZ, TP.HCM",
-      "gender": "Nam",
-      "phoneNumber": "0123456788",
-      "profile": "http://example.com/profile9",
-      "status": "in-progress"
-    },
-    {
-      "id": 10,
-      "avatar": "https://www.w3schools.com/howto/img_avatar.png",
-      "name": "Nguyễn Văn 10",
-      "degree": "TS",
-      "researchArea": ["Data Science"],
-      "workUnit": "ĐH Khoa học Tự nhiên",
-      "address": "Số 19 Đường ABC, Quận XYZ, TP.HCM",
-      "gender": "Nữ",
-      "phoneNumber": "0123456789",
-      "profile": "http://example.com/profile10",
-      "status": "in-progress"
+      headerName: "Trạng thái",
+      field: "contact_status",
+      width: 130,
+      renderCell: (params) => {
+        return (
+          <SelectStatus
+            register={register}
+            initStatus={params.row.contact_status}
+            id={params.row._id}
+          />
+        )
+      }
     }
   ];
+}
+
+export default function TableExpertsThesisDetail({
+  thesis = null,
+}) {
+  const {id} = useParams();
+  const [status, setStatus] = useState(thesis?.committees?.status ?? COMMITTEE_STATUSES.not_started.value);
+
+  const [rows, setRows] = useState(thesis?.committees?.list?.map(item => {
+    delete item?.expert?.id;
+    return ({
+      id: item.expert._id,
+      ...item,
+      ...item.expert
+    })
+  }) ?? []);
+  const [rowSelectionModel, setRowSelectionModel] = useState([]);
+
+  const {
+    register,
+    control,
+    reset,
+    handleSubmit,
+    formState: { errors },
+    getValues,
+    setValue
+  } = useForm({
+    mode: "onSubmit",
+    reValidateMode: "onChange",
+    resolver: undefined,
+    criteriaMode: "firstError"
+  })
+
+  const onSubmit = async (data) => {
+
+    const updateList = await Request.patch(`/theses/${id}/committees`, data);
+    if (updateList?.status === 'error') {
+      pushToast(updateList?.message, 'error');
+    } else {
+      pushToast("Cập nhật danh sách thành công!", 'success');
+    }
+
+    const updateStatus = await Request.patch(`/theses/${id}`, {
+      committees: {
+        status: data.status
+      }
+    });
+    if (updateStatus?.status === 'error') {
+      pushToast(updateStatus?.message, 'error');
+    } else {
+      pushToast("Cập nhật trạng thái thành công!", 'success');
+    }
+
+  }
+
+  const onError = (errors, e) => console.log(errors, e);
+
+  const handleChangeStatus = (event) => {
+    setStatus(event.target.value);
+
+    const res = Request.patch(`/theses/${id}`, {
+      committees: {
+        status: event.target.value
+      }
+    });
+
+    if (res?.status === 'error') {
+      pushToast(res?.message, 'error');
+    } else {
+      pushToast("Cập nhật trạng thái thành công!", 'success');
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!rowSelectionModel.length) {
+      pushToast("Vui lòng chọn ít nhất 1 chuyên gia để xoá!", 'error');
+      return;
+    }
+
+    const res = await Request.del(`/theses/${id}/committees?ids=${rowSelectionModel.join(',')}`);
+
+    if (res?.status === 'error') {
+      pushToast(res?.message, 'error');
+    } else {
+      pushToast("Xoá thành công!", 'success');
+      setRows(rows.filter(row => !rowSelectionModel.includes(row.id)));
+    }
+  }
+
   return (
     <>
-      <div style={{ height: 800, width: '100%' }}>
+      <form
+        style={{
+          height: 800,
+          width: '100%'
+        }}
+        onSubmit={handleSubmit(onSubmit, onError)}
+        id={"form-experts"}
+      >
+        <Box
+          sx={{
+            display: 'flex',
+            gap: 2,
+            alignItems: 'center',
+            marginBottom: 2,
+            justifyContent: 'space-between'
+          }}
+        >
+          <FormControl
+            size={"small"}
+            sx={{
+              minWidth: "150px"
+            }}
+          >
+            <InputLabel id="select-status">Trạng thái</InputLabel>
+            <Select
+              labelId="select-status"
+              id="select-status-input"
+              value={status}
+              label="Trạng thái"
+              inputProps={{
+                ...register('status', {
+                  onChange: handleChangeStatus
+                })
+              }}
+            >
+              {Object.values(COMMITTEE_STATUSES).map((item, index) => (
+                <MenuItem key={index} value={item.value}>
+                  <Chip
+                    label={item.name}
+                    color={item.color}
+                    size={"small"}
+                  />
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+
+          <Button
+            variant={"contained"}
+            color={"error"}
+            onClick={handleDelete}
+          >
+            Xoá
+          </Button>
+        </Box>
         <DataGrid
           rows={rows}
-          columns={columns}
+          columns={columns({
+            register: register
+          })}
           initialState={{
             pagination: {
               paginationModel: { page: 0, pageSize: 10 },
             },
           }}
+          rowSelectionModel={rowSelectionModel}
+          onRowSelectionModelChange={(newRowSelectionModel) => {
+            setRowSelectionModel(newRowSelectionModel);
+          }}
           pageSizeOptions={[5, 10]}
           checkboxSelection
-          // disableRowSelectionOnClick={true}
           getRowHeight={() => "auto"}
+          slots={{
+            toolbar: GridToolbar
+          }}
           sx={{
             "& .MuiDataGrid-columnsContainer": {
               backgroundColor: "primary.main",
@@ -297,21 +403,36 @@ export default function TableExpertsThesisDetail() {
             '&.MuiDataGrid-root--densityComfortable .MuiDataGrid-cell': { py: '22px' },
           }}
         />
-      </div>
+      </form>
     </>
   )
 }
 
-function SelectStatus(initStatus = "") {
+function SelectStatus({
+  initStatus = '',
+  register = null,
+  id = ''
+}) {
+  const {id: thesisId} = useParams();
   const [statusState, setStatusState] = useState(initStatus);
 
-  const handleChangeStatus = (event) => {
+  const handleChangeStatus = async (event) => {
     setStatusState(event.target.value);
+
+    const res = await Request.patch(`/theses/${thesisId}/committees`, {
+      [id]: event.target.value
+    });
+
+    if (res?.status === 'error') {
+      pushToast(res?.message, 'error');
+    } else {
+      pushToast("Cập nhật trạng thái thành công!", 'success');
+    }
   }
 
   return (
     <FormControl
-      size={"small"}
+      // size={"small"}
       // sx={{
       //   minWidth: "150px"
       // }}
@@ -320,7 +441,6 @@ function SelectStatus(initStatus = "") {
         id="select-action-input"
         value={statusState}
         displayEmpty
-        onChange={handleChangeStatus}
         disableUnderline
         variant={"standard"}
         sx={{
@@ -330,36 +450,70 @@ function SelectStatus(initStatus = "") {
           },
           '.MuiOutlinedInput-notchedOutline': { border: 0 }
         }}
+        inputProps={{
+          ...register(id, {
+            onChange: handleChangeStatus
+          })
+        }}
       >
-        {status.map((item, index) => (
+        {CONTACT_STATUSES.map((item, index) => (
           <MenuItem key={index} value={item.value}>
             <Chip
               label={item.label}
               color={item.color}
-              size={"small"}
+              // size={"small"}
             />
           </MenuItem>
         ))}
       </Select>
     </FormControl>
   )
-
 }
 
-const status = [
+const CONTACT_STATUSES = [
   {
-    label: "Đồng ý",
-    value: "accepted",
-    color: "success"
+    label: 'Chưa liên hệ',
+    value: 'not_contacted',
+    color: 'default'
   },
   {
-    label: "Đang liên lạc",
-    value: "in-progress",
-    color: "info"
+    label: 'Đã liên hệ',
+    value: 'contacted',
+    color: 'info'
   },
   {
-    label: "Từ chối",
-    value: "rejected",
-    color: "error"
+    label: 'Đồng ý',
+    value: 'accepted',
+    color: 'success'
+  },
+  {
+    label: 'Từ chối',
+    value: 'declined',
+    color: 'error'
   }
-];
+]
+
+const roles = [
+  { value: "", label: "Chọn", color: "default" },
+  { value: "chair", label: "Chủ tịch", color: "success" },
+  { value: "secretary", label: "Thư kí", color: "primary" },
+  { value: "reviewer", label: "Phản biện", color: "warning" },
+]
+
+const COMMITTEE_STATUSES = {
+  not_started: {
+    name: 'Chưa bắt đầu',
+    value: 'not_started',
+    color: 'default',
+  },
+  waiting: {
+    name: 'Đang tìm kiếm',
+    value: 'waiting',
+    color: 'warning',
+  },
+  done: {
+    name: 'Đã chốt hội đồng',
+    value: 'done',
+    color: 'success',
+  }
+}
