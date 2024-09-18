@@ -1,5 +1,5 @@
 import Box from "@mui/material/Box";
-import {Container, Typography} from "@mui/material";
+import { Chip, Container, Typography } from '@mui/material';
 import Button from "@mui/material/Button";
 import {IoIosArrowBack} from "react-icons/io";
 import TableExperts from "~/components/TableExperts/index.jsx";
@@ -11,6 +11,9 @@ import moment from 'moment';
 import { CiCalendarDate } from 'react-icons/ci';
 import Tooltip from '@mui/material/Tooltip';
 import { PiStudent } from 'react-icons/pi';
+import { MdOutlinePersonOutline } from 'react-icons/md';
+import Divider from '@mui/material/Divider';
+import { FaRegClock } from 'react-icons/fa';
 
 function SearchExpertsByThesis() {
   const navigate = useNavigate();
@@ -75,37 +78,50 @@ function SearchExpertsByThesis() {
             flexDirection: "column",
           }}
         >
-          <Typography variant={"h6"} sx={{marginBottom: 1}}>Luận án: <span style={{fontWeight: 500}}>{thesisInfo?.title}</span></Typography>
+          <Typography variant="h2" fontSize={"24px"} fontWeight={600}>Luận án: {thesisInfo?.title}</Typography>
           <Box
             sx={{
               display: "flex",
-              gap: 2
+              gap: 1
             }}
           >
-            <Tooltip title={"Ngày bảo vệ"} arrow>
-              <Box
-                sx={{
-                  display: "flex",
-                  gap: 1,
-                  alignItems: "center"
-                }}
-              >
-                <CiCalendarDate/>
-                <Typography variant={"body2"}><span style={{fontWeight: 500}}>{moment(thesisInfo?.defense_date).format("DD/MM/YYYY")}</span></Typography>
-              </Box>
-            </Tooltip>
-            <Tooltip title={"Người bảo vệ"} arrow>
-              <Box
-                sx={{
-                  display: "flex",
-                  gap: 1,
-                  alignItems: "center"
-                }}
-              >
-                <PiStudent/>
-                <Typography variant={"body2"}><span style={{fontWeight: 500}}>{thesisInfo?.candidate?.name} - {thesisInfo?.candidate?.phone}</span></Typography>
-              </Box>
-            </Tooltip>
+            <Typography
+              variant="h3"
+              fontSize={"16px"}
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 0.5
+              }}
+            >
+              <MdOutlinePersonOutline/> {thesisInfo?.candidate?.name}
+            </Typography>
+            <Divider orientation="vertical" flexItem />
+            <Typography
+              variant="h3"
+              fontSize={"16px"}
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 0.5
+              }}
+            >
+              <FaRegClock/> {moment(thesisInfo?.defense_date).format('DD/MM/YYYY')}
+            </Typography>
+            <Divider orientation="vertical" flexItem />
+            <Chip
+              variant="filled"
+              color={COMMITTEE_STATUSES[thesisInfo?.committees?.status]?.color}
+              label={COMMITTEE_STATUSES[thesisInfo?.committees?.status]?.name}
+            />
+            <Divider orientation="vertical" flexItem />
+            <Chip
+              variant={"filled"}
+              color={"default"}
+              label={"Xem chi tiết"}
+              clickable={true}
+              onClick={() => navigate(`/thesis/${thesisInfo?._id}`)}
+            />
           </Box>
         </Box>
         <Box
@@ -126,6 +142,24 @@ function SearchExpertsByThesis() {
       </Container>
     </>
   );
+}
+
+const COMMITTEE_STATUSES = {
+  not_started: {
+    name: 'Chưa bắt đầu',
+    value: 'not_started',
+    color: 'default',
+  },
+  waiting: {
+    name: 'Đang tìm kiếm',
+    value: 'waiting',
+    color: 'warning',
+  },
+  done: {
+    name: 'Đã chốt hội đồng',
+    value: 'done',
+    color: 'success',
+  }
 }
 
 export default SearchExpertsByThesis;

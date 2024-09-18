@@ -226,7 +226,7 @@ export default function DetailThesis() {
               width: "100%"
             }}
           />
-          {!isEmpty(thesis) && <TableExpertsThesisDetail thesis={thesis} />}
+          {!isEmpty(thesis) && <TableExpertsThesisDetail setThesis={setThesis} thesis={thesis} />}
         </Box>
       </Container>
     </>

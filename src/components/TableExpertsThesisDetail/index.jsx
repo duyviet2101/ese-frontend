@@ -3,7 +3,7 @@ import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import { Chip, FormControl, InputLabel, Select } from '@mui/material';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-import { useState } from 'react';
+import { memo, useState } from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import pushToast from '~/helpers/sonnerToast.js';
 import { useForm } from 'react-hook-form';
@@ -14,6 +14,7 @@ import Button from '@mui/material/Button';
 
 const columns = ({
   register = null,
+  setThesis = null
 }) => {
   return [
     {
@@ -106,7 +107,7 @@ const columns = ({
     {
       headerName: "Profile/Liên lạc",
       field: "link_profile",
-      width: 170,
+      width: 130,
       renderCell: (params) => {
         const handleCopy = (value) => {
           navigator.clipboard.writeText(value);
@@ -196,6 +197,7 @@ const columns = ({
             register={register}
             initStatus={params.row.contact_status}
             id={params.row._id}
+            setThesis={setThesis}
           />
         )
       }
@@ -205,6 +207,7 @@ const columns = ({
 
 export default function TableExpertsThesisDetail({
   thesis = null,
+  setThesis = null
 }) {
   const {id} = useParams();
   const [status, setStatus] = useState(thesis?.committees?.status ?? COMMITTEE_STATUSES.not_started.value);
@@ -272,6 +275,7 @@ export default function TableExpertsThesisDetail({
     } else {
       pushToast("Cập nhật trạng thái thành công!", 'success');
       setStatus(event.target.value);
+      setThesis(res);
     }
   };
 
@@ -295,7 +299,7 @@ export default function TableExpertsThesisDetail({
     <>
       <form
         style={{
-          height: 800,
+          height: 1000,
           width: '100%'
         }}
         onSubmit={handleSubmit(onSubmit, onError)}
@@ -409,10 +413,11 @@ export default function TableExpertsThesisDetail({
   )
 }
 
-function SelectStatus({
+const SelectStatus = memo(function SelectStatus({
   initStatus = '',
   register = null,
-  id = ''
+  id = '',
+  setThesis = null
 }) {
   const {id: thesisId} = useParams();
   const [statusState, setStatusState] = useState(initStatus);
@@ -428,6 +433,7 @@ function SelectStatus({
     } else {
       pushToast("Cập nhật trạng thái thành công!", 'success');
       setStatusState(event.target.value);
+      setThesis(res);
     }
   }
 
@@ -469,7 +475,7 @@ function SelectStatus({
       </Select>
     </FormControl>
   )
-}
+})
 
 const CONTACT_STATUSES = [
   {

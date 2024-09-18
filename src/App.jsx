@@ -8,7 +8,7 @@ function App() {
       <Toaster
         richColors={true}
         position={"top-right"}
-        expand={true}
+        expand={false}
         closeButton={true}
       />
       <AllRoutes/>

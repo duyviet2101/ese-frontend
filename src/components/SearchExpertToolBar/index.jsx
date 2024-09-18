@@ -298,7 +298,7 @@ export function SearchBoxWhat({
             InputProps={{
               ...params.InputProps,
               type: 'search',
-              placeholder: "Nhập tên, chủ đề...",
+              placeholder: "Nhập từ khoá, cách nhau bằng dấu phẩy...",
               startAdornment: (
                 <InputAdornment
                   position={"start"}
