@@ -417,16 +417,16 @@ function SelectStatus({
   const [statusState, setStatusState] = useState(initStatus);
 
   const handleChangeStatus = async (event) => {
-    setStatusState(event.target.value);
-
     const res = await Request.patch(`/theses/${thesisId}/committees`, {
       [id]: event.target.value
     });
 
     if (res?.status === 'error') {
       pushToast(res?.message, 'error');
+      setStatusState(initStatus);
     } else {
       pushToast("Cập nhật trạng thái thành công!", 'success');
+      setStatusState(event.target.value);
     }
   }
 
