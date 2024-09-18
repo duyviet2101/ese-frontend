@@ -149,7 +149,7 @@ export default function InfoExpertDrawer({
                     width: '100%',
                   }}
                 >
-                  <Typography flexBasis={"20%"} variant={"body1"} fontWeight={500}>Họ và tên</Typography>
+                  <Typography flexBasis={"20%"} variant={"body1"} fontWeight={700}>Họ và tên:</Typography>
                   <Typography flexBasis={"80%"} variant={"body1"}>{expert?.name}</Typography>
                 </Box>
                 <Box
@@ -159,7 +159,7 @@ export default function InfoExpertDrawer({
                     width: '100%',
                   }}
                 >
-                  <Typography flexBasis={"20%"} variant={"body1"} fontWeight={500}>Giới tính</Typography>
+                  <Typography flexBasis={"20%"} variant={"body1"} fontWeight={700}>Giới tính:</Typography>
                   <Typography flexBasis={"80%"} variant={"body1"}>{expert?.gender === 1 ? "Nam" : "Nữ"}</Typography>
                 </Box>
                 <Box
@@ -169,7 +169,7 @@ export default function InfoExpertDrawer({
                     width: '100%',
                   }}
                 >
-                  <Typography flexBasis={"20%"} variant={"body1"} fontWeight={500}>Năm sinh</Typography>
+                  <Typography flexBasis={"20%"} variant={"body1"} fontWeight={700}>Năm sinh:</Typography>
                   <Typography flexBasis={"80%"} variant={"body1"}>{expert?.birth?.replace('//', '')}</Typography>
                 </Box>
                 <Box
@@ -179,7 +179,7 @@ export default function InfoExpertDrawer({
                     width: '100%',
                   }}
                 >
-                  <Typography flexBasis={"20%"} variant={"body1"} fontWeight={500}>Địa chỉ</Typography>
+                  <Typography flexBasis={"20%"} variant={"body1"} fontWeight={700}>Địa chỉ:</Typography>
                   <Typography flexBasis={"80%"} variant={"body1"}>{expert?.address}</Typography>
                 </Box>
                 <Box
@@ -189,7 +189,7 @@ export default function InfoExpertDrawer({
                     width: '100%',
                   }}
                 >
-                  <Typography flexBasis={"20%"} variant={"body1"} fontWeight={500}>Học vị</Typography>
+                  <Typography flexBasis={"20%"} variant={"body1"} fontWeight={700}>Học vị:</Typography>
                   <Typography flexBasis={"80%"} variant={"body1"}>{expert?.degree}</Typography>
                 </Box>
                 <Box
@@ -199,7 +199,7 @@ export default function InfoExpertDrawer({
                     width: '100%',
                   }}
                 >
-                  <Typography flexBasis={"20%"} variant={"body1"} fontWeight={500}>Chức vụ và đơn vị công tác (hiện tại/trước khi nghỉ hưu)</Typography>
+                  <Typography flexBasis={"20%"} variant={"body1"} fontWeight={700}>Chức vụ và đơn vị công tác (hiện tại/trước khi nghỉ hưu):</Typography>
                   <Typography flexBasis={"80%"} variant={"body1"}>{`${expert?.position}, ${expert?.company}`}</Typography>
                 </Box>
                 <Chip

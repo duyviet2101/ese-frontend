@@ -11,6 +11,7 @@ import { pick } from 'lodash';
 import Request from '~/utils/request.js';
 import { useParams } from 'react-router-dom';
 import Button from '@mui/material/Button';
+import InfoExpertDrawer from '~/components/InfoExpertDrawer/index.jsx';
 
 const columns = ({
   register = null,
@@ -122,16 +123,7 @@ const columns = ({
               flexWrap: "wrap"
             }}
           >
-            <Tooltip title={params.row.link_profile}>
-              <Chip
-                label="Chi tiết"
-                component="a"
-                href={params.row.link_profile}
-                target={"_blank"}
-                clickable
-                onClick={(event) => event.stopPropagation()}
-              />
-            </Tooltip>
+            <InfoExpertDrawer id={params.row.id}/>
             {params?.row?.phone?.trim() && <Tooltip title={params.row.phone}>
               <Chip
                 label={params.row.phone}
