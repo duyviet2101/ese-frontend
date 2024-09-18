@@ -7,6 +7,7 @@ import Tooltip from '@mui/material/Tooltip';
 import { useMemo, useRef, useState } from 'react';
 import SearchToolBar from '~/components/SearchExpertToolBar/index.jsx';
 import pushToast from '~/helpers/sonnerToast.js';
+import InfoExpertDrawer from '~/components/InfoExpertDrawer/index.jsx';
 
 const columns = [
   {
@@ -109,16 +110,7 @@ const columns = [
             flexWrap: "wrap"
           }}
         >
-          <Tooltip title={params.row.link_profile}>
-            <Chip
-              label="Chi tiết"
-              component="a"
-              href={params.row.link_profile}
-              target={"_blank"}
-              clickable
-              onClick={(event) => event.stopPropagation()}
-            />
-          </Tooltip>
+          <InfoExpertDrawer id={params.row.id}/>
           {params?.row?.phone?.trim() && <Tooltip title={params.row.phone}>
             <Chip
               label={params.row.phone}
@@ -194,7 +186,7 @@ export default function TableExperts() {
         paginationModel={paginationModel}
       />
       <Divider/>
-      <div style={{ height: 800, width: '100%' }}>
+      <div style={{ height: 1000, width: '100%' }}>
         <DataGrid
           rows={rows}
           columns={columns}
@@ -204,7 +196,6 @@ export default function TableExperts() {
           paginationMode={"server"}
           onPaginationModelChange={setPaginationModel}
           pageSizeOptions={[PAGE_SIZE]}
-          checkboxSelection
           getRowHeight={() => "auto"}
           sx={{
             "& .MuiDataGrid-columnsContainer": {
