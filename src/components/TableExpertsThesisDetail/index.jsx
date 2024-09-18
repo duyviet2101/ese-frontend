@@ -258,10 +258,9 @@ export default function TableExpertsThesisDetail({
 
   const onError = (errors, e) => console.log(errors, e);
 
-  const handleChangeStatus = (event) => {
-    setStatus(event.target.value);
+  const handleChangeStatus = async (event) => {
 
-    const res = Request.patch(`/theses/${id}`, {
+    const res = await Request.patch(`/theses/${id}`, {
       committees: {
         status: event.target.value
       }
@@ -269,8 +268,10 @@ export default function TableExpertsThesisDetail({
 
     if (res?.status === 'error') {
       pushToast(res?.message, 'error');
+      setStatus(thesis?.committees?.status ?? COMMITTEE_STATUSES.not_started.value);
     } else {
       pushToast("Cập nhật trạng thái thành công!", 'success');
+      setStatus(event.target.value);
     }
   };
 
