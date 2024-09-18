@@ -321,6 +321,19 @@ export default function TableSearchExpertsByThesis({
         paginationModel={paginationModel}
       />
       <Divider/>
+      <Button
+        variant="contained"
+        color={"success"}
+        sx={{
+          width: "20%",
+          alignSelf: "flex-end",
+        }}
+        startIcon={<IoPersonAdd/>}
+        type={"submit"}
+        form={"form-add-to-committees"}
+      >
+        Thêm vào hội đồng
+      </Button>
       <form
         style={{ height: 800, width: '100%' }}
         id={"form-add-to-committees"}
@@ -385,20 +398,6 @@ export default function TableSearchExpertsByThesis({
           keepNonExistentRowsSelected
         />
       </form>
-      <Divider/>
-      <Button
-        variant="contained"
-        color={"success"}
-        sx={{
-          width: "20%",
-          alignSelf: "flex-end",
-        }}
-        startIcon={<IoPersonAdd/>}
-        type={"submit"}
-        form={"form-add-to-committees"}
-      >
-        Thêm vào hội đồng
-      </Button>
     </>
   );
 }

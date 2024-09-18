@@ -189,21 +189,21 @@ export default function DetailThesis() {
                 justifyContent: "flex-end"
               }}
             >
-              <Button
+              {thesis?.committees?.status !== 'done' && <Button
                 variant="contained"
                 component={Link}
                 to={`/thesis/${id}/search-experts?what=${thesis?.keywords?.join(',')}`}
                 sx={{
-                  backgroundColor: "#007bff",
-                  color: "#fff",
-                  minWidth: "150px",
-                  "&:hover": {
-                    backgroundColor: "#0056b3"
-                  },
+                  backgroundColor: '#007bff',
+                  color: '#fff',
+                  minWidth: '150px',
+                  '&:hover': {
+                    backgroundColor: '#0056b3'
+                  }
                 }}
               >
                 Tìm kiếm hội đồng
-              </Button>
+              </Button>}
               {/*<Button*/}
               {/*  variant="contained"*/}
               {/*  sx={{*/}

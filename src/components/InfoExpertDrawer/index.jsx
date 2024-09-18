@@ -24,6 +24,9 @@ export default function InfoExpertDrawer({
   if (expert?.articles?.length > 0) {
     expert?.articles?.map(article => {
       if (!articles[article.type]) {
+        if (article.type === null) {
+          article.type = 'Khác';
+        }
         articles[article.type] = [];
       }
       articles[article.type].push(article);
