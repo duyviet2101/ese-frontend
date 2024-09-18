@@ -18,7 +18,7 @@ const columns = [
       <Box
         sx={{
           display: 'flex',
-          alignItems: 'center',
+          // alignItems: 'center',
           justifyContent: 'flex-start',
           gap: 1,
           width: "100%",
