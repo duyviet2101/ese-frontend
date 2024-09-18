@@ -101,8 +101,16 @@ export default function InfoExpertDrawer({
                 }}
               >
                 <Typography variant={"body1"}>Thông tin liên hệ:</Typography>
-                <Chip label={expert?.email} color={"primary"} variant={"outlined"} />
-                <Chip label={expert?.phone} color={"primary"} variant={"outlined"} />
+                <Box
+                  sx={{
+                    display: 'flex',
+                    gap: 2,
+                    flexWrap: 'wrap',
+                  }}
+                >
+                  <Chip label={expert?.email} color={"warning"} variant={"outlined"} />
+                  <Chip label={expert?.phone} color={"warning"} variant={"outlined"} />
+                </Box>
               </Box>
               {expert?.research_area?.length > 0 && <Box
                 sx={{
@@ -113,18 +121,26 @@ export default function InfoExpertDrawer({
                 }}
               >
                 <Typography variant={'body1'}>Lĩnh vực nghiên cứu:</Typography>
-                {expert?.research_area?.map((area, index) => (
-                  <Chip
-                    key={index}
-                    label={area?.name}
-                    color={'primary'}
-                    variant={'outlined'}
-                    sx={{
-                      marginRight: 0.5,
-                      marginBottom: 0.5
-                    }}
-                  />
-                ))}
+                <Box
+                  sx={{
+                    display: 'flex',
+                    gap: 0.5,
+                    flexWrap: 'wrap',
+                  }}
+                >
+                  {expert?.research_area?.map((area, index) => (
+                    <Chip
+                      key={index}
+                      label={area?.name}
+                      color={'primary'}
+                      variant={'outlined'}
+                      sx={{
+                        marginRight: 0.5,
+                        marginBottom: 0.5
+                      }}
+                    />
+                  ))}
+                </Box>
               </Box>}
             </Box>
           </Box>
